@@ -15,12 +15,10 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.iktpreobuka.e_diary.enumerations.EMarkType;
 
 @Entity
 @Table (name = "mark")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class MarkEntity {
 
 	private Long id;
@@ -41,9 +39,11 @@ public class MarkEntity {
 		super();
 	}
 	
-	public MarkEntity(Integer mark, Date date, EMarkType markType, StudentEntity student, TeacherEntity teacher,
+	public MarkEntity(Integer version, String code, Integer mark, Date date, EMarkType markType, StudentEntity student, TeacherEntity teacher,
 			SubjectEntity subject, SemesterEntity semester) {
 		super();
+		this.version = version;
+		this.code = code;
 		this.mark = mark;
 		this.date = date;
 		this.markType = markType;
@@ -85,28 +85,28 @@ public class MarkEntity {
 	public EMarkType getMarkType() {
 		return markType;
 	}
-	
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "student")
 	public StudentEntity getStudent() {
 		return student;
 	}
-	
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "teacher")
 	public TeacherEntity getTeacher() {
 		return teacher;
 	}
-	
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "subject")
 	public SubjectEntity getSubject() {
 		return subject;
 	}
-
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "semester")

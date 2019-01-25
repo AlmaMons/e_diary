@@ -1,15 +1,24 @@
 package com.iktpreobuka.e_diary.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
-@MappedSuperclass
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class PersonEntity {
 	
 	protected Long id;
@@ -24,14 +33,17 @@ public abstract class PersonEntity {
 	protected String email;
 	protected Date birthDate;
 	
+	protected List<UserEntity> users = new ArrayList<>();
 	
 	public PersonEntity() {
 		super();
 	}
 	
-	public PersonEntity(String name, String lastName, String address, String phoneNumber, String jmbg, String email,
-			Date birthDate) {
+	public PersonEntity(Integer version, String code, String name, String lastName, String address, String phoneNumber, String jmbg, String email,
+			Date birthDate, List<UserEntity> users) {
 		super();
+		this.version = version;
+		this.code = code;
 		this.name = name;
 		this.lastName = lastName;
 		this.address = address;
@@ -39,6 +51,7 @@ public abstract class PersonEntity {
 		this.jmbg = jmbg;
 		this.email = email;
 		this.birthDate = birthDate;
+		this.users = users;
 	}
 	
 	@Id
@@ -93,6 +106,16 @@ public abstract class PersonEntity {
 		return birthDate;
 	}
 	
+
+	@OneToMany (mappedBy = "person", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
+	public List<UserEntity> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserEntity> users) {
+		this.users = users;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}

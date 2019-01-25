@@ -33,9 +33,11 @@ public class SchoolYearEntity {
 		super();
 	}
 	
-	public SchoolYearEntity(String year, List<ClassEntity> classes, List<SemesterEntity> semesters,
+	public SchoolYearEntity(Integer version, String code, String year, List<ClassEntity> classes, List<SemesterEntity> semesters,
 			List<SubjectEntity> subjects) {
 		super();
+		this.version = version;
+		this.code = code;
 		this.year = year;
 		this.classes = classes;
 		this.semesters = semesters;

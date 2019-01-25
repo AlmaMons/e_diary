@@ -18,34 +18,33 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table (name = "subject")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "subject")
 public class SubjectEntity {
 
 	private Long id;
 	private Integer version;
 	private String code;
-	
+
 	private String name;
 	private Integer fond;
-	
+
 	private List<ClassEntity> classes = new ArrayList<>();
 	private SchoolYearEntity schoolYear;
 	private List<MarkEntity> marks = new ArrayList<>();
 	private List<TeacherEntity> teachers = new ArrayList<>();
-	
-	
+
 	public SubjectEntity() {
 		super();
 	}
-	
-	public SubjectEntity(String name, Integer fond, List<ClassEntity> classes, SchoolYearEntity schoolYear, List<MarkEntity> marks, List<TeacherEntity> teachers) {
+
+	public SubjectEntity(Integer version, String code, String name, Integer fond, List<ClassEntity> classes,
+			SchoolYearEntity schoolYear, List<MarkEntity> marks, List<TeacherEntity> teachers) {
 		super();
+		this.version = version;
+		this.code = code;
 		this.name = name;
 		this.fond = fond;
 		this.classes = classes;
@@ -55,53 +54,58 @@ public class SubjectEntity {
 	}
 
 	@Id
-	@GeneratedValue (strategy = GenerationType.AUTO)
-	@Column (name = "subject_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "subject_id")
 	public Long getId() {
 		return id;
 	}
 
 	@Version
-	@Column (name = "version")
+	@Column(name = "version")
 	public Integer getVersion() {
 		return version;
 	}
 
-	@Column (name = "code")
+	@Column(name = "code")
 	public String getCode() {
 		return code;
 	}
-	
-	@Column (name = "name")
+
+	@Column(name = "name")
 	public String getName() {
 		return name;
 	}
 
-	@Column (name = "fond")
+	@Column(name = "fond")
 	public Integer getFond() {
 		return fond;
 	}
 
+	// DTO
 	@JsonIgnore
-	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn (name = "schoolYear")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@JoinColumn(name = "schoolYear")
 	public SchoolYearEntity getSchoolYear() {
 		return schoolYear;
 	}
 
-	@OneToMany (mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
+	@OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH })
 	public List<MarkEntity> getMarks() {
 		return marks;
 	}
-	
-	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JoinTable(name = "subject_class", joinColumns = {@JoinColumn(name = "subject_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name="class_id", nullable = false, updatable = false)})
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@JoinTable(name = "subject_class", joinColumns = {
+			@JoinColumn(name = "subject_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "class_id", nullable = false, updatable = false) })
 	public List<ClassEntity> getClasses() {
 		return classes;
 	}
 
-	@ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	@JoinTable(name = "subject_teacher", joinColumns = {@JoinColumn(name = "subject_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name="id", nullable = false, updatable = false)})
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@JoinTable(name = "subject_teacher", joinColumns = {
+			@JoinColumn(name = "subject_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "id", nullable = false, updatable = false) })
 	public List<TeacherEntity> getTeachers() {
 		return teachers;
 	}
@@ -113,7 +117,7 @@ public class SubjectEntity {
 	public void setTeachers(List<TeacherEntity> teachers) {
 		this.teachers = teachers;
 	}
-	
+
 	public void setMarks(List<MarkEntity> marks) {
 		this.marks = marks;
 	}
@@ -142,13 +146,4 @@ public class SubjectEntity {
 		this.fond = fond;
 	}
 
-	
-
-
-	
-	
-
-	
-	
-	
 }

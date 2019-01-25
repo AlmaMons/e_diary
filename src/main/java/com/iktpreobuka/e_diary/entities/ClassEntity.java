@@ -19,11 +19,9 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity 
 @Table (name = "class")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ClassEntity {
 
 	private Long id;
@@ -41,8 +39,10 @@ public class ClassEntity {
 		super();
 	}
 	
-	public ClassEntity(String clas, Integer department,List<StudentEntity> students, SchoolYearEntity schoolYear, List<SubjectEntity> subject) {
+	public ClassEntity(Integer version, String code, String clas, Integer department,List<StudentEntity> students, SchoolYearEntity schoolYear, List<SubjectEntity> subject) {
 		super();
+		this.version = version;
+		this.code = code;
 		this.clas = clas;
 		this.department = department;
 		this.students = students;
@@ -83,6 +83,7 @@ public class ClassEntity {
 		return students;
 	}
 
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "schoolYear")

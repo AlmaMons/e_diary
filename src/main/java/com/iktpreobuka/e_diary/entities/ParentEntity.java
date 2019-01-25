@@ -21,9 +21,9 @@ public class ParentEntity extends PersonEntity {
 		super();
 	}
 
-	public ParentEntity(String name, String lastName, String address, String phoneNumber, String jmbg, String email,
-			Date birthDate, List<StudentEntity> students) {
-		super(name, lastName, address, phoneNumber, jmbg, email, birthDate);
+	public ParentEntity(Integer version, String code, String name, String lastName, String address, String phoneNumber, String jmbg, String email,
+			Date birthDate, List<UserEntity> users, List<StudentEntity> students) {
+		super(version, code, name, lastName, address, phoneNumber, jmbg, email, birthDate, users);
 		this.students = students;
 	}
 

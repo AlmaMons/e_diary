@@ -18,11 +18,9 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table (name = "semester")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SemesterEntity {
 	
 	private Long id;
@@ -41,9 +39,11 @@ public class SemesterEntity {
 		super();
 	}
 	
-	public SemesterEntity(Integer orderNumber, Date dateFrom, Date dateTo, SchoolYearEntity schoolYear,
+	public SemesterEntity(Integer version, String code, Integer orderNumber, Date dateFrom, Date dateTo, SchoolYearEntity schoolYear,
 			List<MarkEntity> marks) {
 		super();
+		this.version = version;
+		this.code = code;
 		this.orderNumber = orderNumber;
 		this.dateFrom = dateFrom;
 		this.dateTo = dateTo;
@@ -83,7 +83,7 @@ public class SemesterEntity {
 	public Date getDateTo() {
 		return dateTo;
 	}
-	
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "school_year")

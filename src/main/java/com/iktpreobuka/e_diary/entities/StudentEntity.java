@@ -13,11 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table (name = "student")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class StudentEntity extends PersonEntity {
 
 	private ParentEntity parent;
@@ -29,21 +27,21 @@ public class StudentEntity extends PersonEntity {
 		super();
 	}
 
-	public StudentEntity(String name, String lastName, String address, String phoneNumber, String jmbg, String email,
-			Date birthDate, ParentEntity parent, ClassEntity clas, List<MarkEntity>mark) {
-		super(name, lastName, address, phoneNumber, jmbg, email, birthDate);
+	public StudentEntity(Integer version, String code, String name, String lastName, String address, String phoneNumber, String jmbg, String email,
+			Date birthDate, List<UserEntity> users, ParentEntity parent, ClassEntity clas, List<MarkEntity>mark) {
+		super(version, code, name, lastName, address, phoneNumber, jmbg, email, birthDate, users);
 		this.parent = parent;
 		this.clas = clas;
 		this.marks = mark;
 	}
-
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "parent")
 	public ParentEntity getParent() {
 		return parent;
 	}
-	
+	//DTO
 	@JsonIgnore
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "clas")
