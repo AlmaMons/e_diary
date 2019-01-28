@@ -33,7 +33,7 @@ public class ClassEntity {
 	
 	private List<StudentEntity> students = new ArrayList<>();
 	private SchoolYearEntity schoolYear;
-	private List<SubjectEntity> subject;
+	private List<SubjectEntity> subject = new ArrayList<>();
 
 	public ClassEntity() {
 		super();

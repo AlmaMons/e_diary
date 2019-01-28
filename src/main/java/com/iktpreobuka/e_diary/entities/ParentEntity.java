@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.iktpreobuka.e_diary.entities.dto.ParentDTO;
+
 @Entity
 @Table (name = "parent")
 public class ParentEntity extends PersonEntity {
@@ -25,6 +27,13 @@ public class ParentEntity extends PersonEntity {
 			Date birthDate, List<UserEntity> users, List<StudentEntity> students) {
 		super(version, code, name, lastName, address, phoneNumber, jmbg, email, birthDate, users);
 		this.students = students;
+	}
+	
+	
+	public ParentEntity(ParentDTO parent) {
+		super(parent.getName(), parent.getLastName(), parent.getAddress(), parent.getPhoneNumber(), parent.getJmbg(), 
+				parent.getEmail(), parent.getBirthDate(), );
+		this.students = new ArrayList<>();
 	}
 
 	@OneToMany (mappedBy = "parent", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
