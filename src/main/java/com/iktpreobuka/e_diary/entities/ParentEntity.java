@@ -3,6 +3,7 @@ package com.iktpreobuka.e_diary.entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -31,9 +32,21 @@ public class ParentEntity extends PersonEntity {
 	
 	
 	public ParentEntity(ParentDTO parent) {
-		super(parent.getName(), parent.getLastName(), parent.getAddress(), parent.getPhoneNumber(), parent.getJmbg(), 
-				parent.getEmail(), parent.getBirthDate(), );
+		super(1, UUID.randomUUID().toString(), parent.getName(), parent.getLastName(), parent.getAddress(), parent.getPhoneNumber(), parent.getJmbg(),
+				parent.getEmail(), parent.getBirthDate(), new ArrayList<>());
 		this.students = new ArrayList<>();
+	}
+
+	public void updateParent(ParentEntity p) {
+		setAddress(p.getAddress());
+		setBirthDate(p.getBirthDate());
+		setName(p.getName());
+		setLastName(p.getLastName()); 
+		setEmail(p.getEmail());
+		setJmbg(p.getJmbg());
+		setPhoneNumber(p.getPhoneNumber());
+//		setStudents(p.getStudents());
+//		setUsers(p.getUsers());
 	}
 
 	@OneToMany (mappedBy = "parent", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})

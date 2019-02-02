@@ -2,17 +2,43 @@ package com.iktpreobuka.e_diary.entities.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iktpreobuka.e_diary.entities.ParentEntity;
 
 public class ParentDTO {
-
+	
 	private Long id;
+	
+	@NotNull(message="Name must be provided!")
+	@Size (min = 2, max = 20, message = "Name must be between {min} and {max} characters long!")
 	private String name;
+	
+	@NotNull(message="Last name must be provided!")
+	@Size (min = 2, max =30, message = "Last name must be between {min} and {max} characters long!")
 	private String lastName;
+	
+	@NotNull(message="Address must be provided!")
+	@Size(max=50, message= "Category description can't be more than {max} characters long!")
 	private String address;
+	
+	@NotNull(message="Phone number must be provided!")
+	@Size (max = 20, message = "Phone number must be between {min} and {max} characters long!")
 	private String phoneNumber;
+	
+	@NotNull(message="JMBG must be provided!")
+	@Pattern(regexp = "^[0-9]{13}$", message = "JMBG must have 13 characters!")
 	private String jmbg;
+	
+	@NotNull(message = "Email must be provided!")
+	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Email is not valid!")
 	private String email;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone="Europe/Belgrade")
 	private Date birthDate;
 
 	public ParentDTO() {
@@ -39,7 +65,7 @@ public class ParentDTO {
 		this.address = parent.getAddress();
 		this.phoneNumber = parent.getPhoneNumber();
 		this.jmbg = parent.getJmbg();
-		this.email = parent.getJmbg();
+		this.email = parent.getEmail();
 		this.birthDate = parent.getBirthDate();
 	}
 

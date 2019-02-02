@@ -1,48 +1,38 @@
 package com.iktpreobuka.e_diary.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iktpreobuka.e_diary.enumerations.ERole;
 
 @Entity
 @Table(name = "user")
 public class UserEntity {
 
 	private Long id;
-	private Integer version;
-	private String code;
-
-	private String email;
+	private String username;
 	private String password;
-	private String name;
-	private String lastName;
-
-	private RoleEntity role;
 	private PersonEntity person;
+	private ERole role;
 
 	public UserEntity() {
 		super();
 	}
 
-	public UserEntity(Integer version, String code, String email, String name, String lastName, RoleEntity role, PersonEntity person) {
+	public UserEntity(Long id, String username, String password, PersonEntity person, ERole role) {
 		super();
-		this.version = version;
-		this.code = code;
-		this.email = email;
-		this.name = name;
-		this.lastName = lastName;
-		this.role = role;
+		this.id = id;
+		this.username = username;
+		this.password = password;
 		this.person = person;
+		this.role = role;
 	}
 
 	@Id
@@ -52,86 +42,49 @@ public class UserEntity {
 		return id;
 	}
 
-	@Version
-	@Column (name = "version")
-	public Integer getVersion() {
-		return version;
-	}
-	
-	@Column (name = "code")
-	public String getCode() {
-		return code;
+	@Column(name = "username")
+	public String getUsername() {
+		return username;
 	}
 
-	@Column(name = "email")
-	public String getEmail() {
-		return email;
-	}
-	//DTO
+	// DTO
 	@JsonIgnore
 	@Column(name = "password")
 	public String getPassword() {
 		return password;
 	}
 
-	@Column(name = "name")
-	public String getName() {
-		return name;
-	}
-
-	@Column(name = "last_name")
-	public String getLastName() {
-		return lastName;
-	}
-
-	
-	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn(name = "role")
-	public RoleEntity getRole() {
+	@Column(name = "role")
+	public ERole getRole() {
 		return role;
 	}
 
-	
-	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "person")
 	public PersonEntity getPerson() {
 		return person;
+	}
+	
+	public void setRole(ERole role) {
+		this.role = role;
+	}
+
+	
+
+	public void setPerson(PersonEntity person) {
+		this.person = person;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public void setRole(RoleEntity role) {
-		this.role = role;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-	
-	public void setPerson(PersonEntity person) {
-		this.person = person;
 	}
 
 }

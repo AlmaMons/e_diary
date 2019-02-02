@@ -1,11 +1,19 @@
 package com.iktpreobuka.e_diary.services;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
-import com.iktpreobuka.e_diary.entities.dto.ParentDTO;
+
+import com.iktpreobuka.e_diary.entities.ParentEntity;
 
 public interface ParentService {
+
+	public List<ParentEntity> getAllParents();
 	
-	//public boolean deleteParent(Long id) {}
-	public ParentDTO saveParentDto(ParentDTO parentDto);
+	public ParentEntity findParentById(Long id);
+	
+	public ParentEntity saveParent(ParentEntity parent);
+	
+	public ParentEntity updateParent(ParentEntity parent, Long id);
+	
+	public Boolean removeParent(Long id);
 }
