@@ -44,8 +44,20 @@ public class StudentEntity extends PersonEntity {
 		this.parent = p;
 		this.marks = new ArrayList<>();
 	}
-
 	
+	public void updateStudent (StudentEntity s) {
+		setAddress(s.getAddress());
+		setBirthDate(s.getBirthDate());
+		setName(s.getName());
+		setLastName(s.getLastName()); 
+		setEmail(s.getEmail());
+		setJmbg(s.getJmbg());
+		setPhoneNumber(s.getPhoneNumber());
+		setParent(s.getParent());
+		setUsers(s.getUsers());
+	}
+
+	//referencedColumnName="id"
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "parent", nullable = false)
 	public ParentEntity getParent() {

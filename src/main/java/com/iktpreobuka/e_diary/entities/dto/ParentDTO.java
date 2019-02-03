@@ -63,21 +63,6 @@ public class ParentDTO {
 		this.birthDate = birthDate;
 	}
 
-	// za put
-	public ParentDTO(Long id, String name, String lastName, String address, String phoneNumber, String jmbg,
-			String email, Date birthDate, ArrayList<Long> students) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.lastName = lastName;
-		this.address = address;
-		this.phoneNumber = phoneNumber;
-		this.jmbg = jmbg;
-		this.email = email;
-		this.birthDate = birthDate;
-		this.students = students;
-	}
-
 	public ParentDTO(ParentEntity parent) {
 		this.id = parent.getId();
 		this.name = parent.getName();

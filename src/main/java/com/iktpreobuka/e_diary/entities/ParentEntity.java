@@ -17,6 +17,7 @@ import com.iktpreobuka.e_diary.entities.dto.ParentDTO;
 @Table (name = "parent")
 public class ParentEntity extends PersonEntity {
 	
+	
 	private List<StudentEntity> students = new ArrayList<>();
 
 	
@@ -46,7 +47,7 @@ public class ParentEntity extends PersonEntity {
 		setJmbg(p.getJmbg());
 		setPhoneNumber(p.getPhoneNumber());
 		setStudents(p.getStudents());
-//		setUsers(p.getUsers());
+		setUsers(p.getUsers());
 	}
 
 	@OneToMany (mappedBy = "parent", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
