@@ -3,6 +3,7 @@ package com.iktpreobuka.e_diary.entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,7 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iktpreobuka.e_diary.entities.dto.StudentDTO;
+
 
 @Entity
 @Table (name = "student")
@@ -34,15 +36,22 @@ public class StudentEntity extends PersonEntity {
 		this.clas = clas;
 		this.marks = mark;
 	}
-	//DTO
-	@JsonIgnore
+	
+	
+	public StudentEntity(StudentDTO studentDTO, ParentEntity p) {
+		super(1, UUID.randomUUID().toString(), studentDTO.getName(), studentDTO.getLastName(), studentDTO.getAddress(), 
+				studentDTO.getPhoneNumber(), studentDTO.getJmbg(), studentDTO.getEmail(), studentDTO.getBirthDate(), new ArrayList<>());
+		this.parent = p;
+		this.marks = new ArrayList<>();
+	}
+
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn (name = "parent")
+	@JoinColumn (name = "parent", nullable = false)
 	public ParentEntity getParent() {
 		return parent;
 	}
-	//DTO
-	@JsonIgnore
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "clas")
 	public ClassEntity getClas() {
@@ -65,6 +74,7 @@ public class StudentEntity extends PersonEntity {
 	public void setParent(ParentEntity parent) {
 		this.parent = parent;
 	}
+
 
 	
 	

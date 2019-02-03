@@ -1,6 +1,7 @@
 package com.iktpreobuka.e_diary.entities;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iktpreobuka.e_diary.entities.dto.MarkDTO;
 import com.iktpreobuka.e_diary.enumerations.EMarkType;
 
 @Entity
@@ -52,6 +53,20 @@ public class MarkEntity {
 		this.subject = subject;
 		this.semester = semester;
 	}
+	
+	public MarkEntity(MarkDTO mark, StudentEntity student, TeacherEntity teacher, SubjectEntity subject, SemesterEntity semester) {
+		super();
+		this.version = 1;
+		this.code = UUID.randomUUID().toString();
+		this.mark = mark.getMark() ;
+		this.date = new Date();
+		this.markType =  mark.getMarkType();
+		this.student = student;
+		this.teacher = teacher;
+		this.subject = subject;
+		this.semester = semester;
+		
+	}
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
@@ -71,45 +86,41 @@ public class MarkEntity {
 		return code;
 	}
 	
-	@Column (name = "mark")
+	@Column (name = "mark", nullable = false)
 	public Integer getMark() {
 		return mark;
 	}
 	
-	@Column (name = "date")
+	@Column (name = "date", nullable = false)
 	public Date getDate() {
 		return date;
 	}
 	
-	@Column (name = "mark_type")
+	@Column (name = "mark_type", nullable = false)
 	public EMarkType getMarkType() {
 		return markType;
 	}
-	//DTO
-	@JsonIgnore
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn (name = "student")
+	@JoinColumn (name = "student", nullable = false)
 	public StudentEntity getStudent() {
 		return student;
 	}
-	//DTO
-	@JsonIgnore
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn (name = "teacher")
+	@JoinColumn (name = "teacher", nullable = false)
 	public TeacherEntity getTeacher() {
 		return teacher;
 	}
-	//DTO
-	@JsonIgnore
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn (name = "subject")
+	@JoinColumn (name = "subject", nullable = false)
 	public SubjectEntity getSubject() {
 		return subject;
 	}
-	//DTO
-	@JsonIgnore
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn (name = "semester")
+	@JoinColumn (name = "semester", nullable = false)
 	public SemesterEntity getSemester() {
 		return semester;
 	}

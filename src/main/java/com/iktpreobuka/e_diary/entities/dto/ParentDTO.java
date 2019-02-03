@@ -1,6 +1,8 @@
 package com.iktpreobuka.e_diary.entities.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -8,45 +10,48 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iktpreobuka.e_diary.entities.ParentEntity;
+import com.iktpreobuka.e_diary.entities.StudentEntity;
 
 public class ParentDTO {
-	
+
 	private Long id;
-	
-	@NotNull(message="Name must be provided!")
-	@Size (min = 2, max = 20, message = "Name must be between {min} and {max} characters long!")
+
+	@NotNull(message = "Name must be provided!")
+	@Size(min = 2, max = 20, message = "Name must be between {min} and {max} characters long!")
 	private String name;
-	
-	@NotNull(message="Last name must be provided!")
-	@Size (min = 2, max =30, message = "Last name must be between {min} and {max} characters long!")
+
+	@NotNull(message = "Last name must be provided!")
+	@Size(min = 2, max = 30, message = "Last name must be between {min} and {max} characters long!")
 	private String lastName;
-	
-	@NotNull(message="Address must be provided!")
-	@Size(max=50, message= "Category description can't be more than {max} characters long!")
+
+	@NotNull(message = "Address must be provided!")
+	@Size(max = 50, message = "Category description can't be more than {max} characters long!")
 	private String address;
-	
-	@NotNull(message="Phone number must be provided!")
-	@Size (max = 20, message = "Phone number must be between {min} and {max} characters long!")
+
+	@NotNull(message = "Phone number must be provided!")
+	@Size(max = 20, message = "Phone number must be between {min} and {max} characters long!")
 	private String phoneNumber;
-	
-	@NotNull(message="JMBG must be provided!")
+
+	@NotNull(message = "JMBG must be provided!")
 	@Pattern(regexp = "^[0-9]{13}$", message = "JMBG must have 13 characters!")
 	private String jmbg;
-	
+
 	@NotNull(message = "Email must be provided!")
 	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Email is not valid!")
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message = "Email is not valid!")
 	private String email;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone="Europe/Belgrade")
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Belgrade")
 	private Date birthDate;
+
+	private ArrayList<Long> students;
 
 	public ParentDTO() {
 		super();
 	}
 
-	public ParentDTO(Long id, String name, String lastName, String address,
-			String phoneNumber, String jmbg, String email, Date birthDate) {
+	public ParentDTO(Long id, String name, String lastName, String address, String phoneNumber, String jmbg,
+			String email, Date birthDate) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -58,6 +63,21 @@ public class ParentDTO {
 		this.birthDate = birthDate;
 	}
 
+	// za put
+	public ParentDTO(Long id, String name, String lastName, String address, String phoneNumber, String jmbg,
+			String email, Date birthDate, ArrayList<Long> students) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.lastName = lastName;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.jmbg = jmbg;
+		this.email = email;
+		this.birthDate = birthDate;
+		this.students = students;
+	}
+
 	public ParentDTO(ParentEntity parent) {
 		this.id = parent.getId();
 		this.name = parent.getName();
@@ -67,6 +87,8 @@ public class ParentDTO {
 		this.jmbg = parent.getJmbg();
 		this.email = parent.getEmail();
 		this.birthDate = parent.getBirthDate();
+		this.students = (ArrayList<Long>) parent.getStudents().stream().map(StudentEntity::getId)
+				.collect(Collectors.toList());
 	}
 
 	public Long getId() {
@@ -131,6 +153,14 @@ public class ParentDTO {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+	}
+
+	public ArrayList<Long> getStudents() {
+		return students;
+	}
+
+	public void setStudents(ArrayList<Long> students) {
+		this.students = students;
 	}
 
 }

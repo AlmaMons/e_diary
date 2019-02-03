@@ -3,6 +3,7 @@ package com.iktpreobuka.e_diary.entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.iktpreobuka.e_diary.entities.dto.TeacherDTO;
 
 @Entity
 @Table(name = "teacher")
@@ -24,11 +27,20 @@ public class TeacherEntity extends PersonEntity {
 		super();
 	}
 
-	public TeacherEntity(Integer version, String code, String name, String lastName, String address, String phoneNumber, String jmbg, String email,
-			Date birthDate, List<UserEntity> users, List<SubjectEntity> subject, List<MarkEntity> marks) {
+	public TeacherEntity(Integer version, String code, String name, String lastName, String address, String phoneNumber,
+			String jmbg, String email, Date birthDate, List<UserEntity> users, List<SubjectEntity> subject,
+			List<MarkEntity> marks) {
 		super(version, code, name, lastName, address, phoneNumber, jmbg, email, birthDate, users);
 		this.subjects = subject;
 		this.marks = marks;
+	}
+
+	public TeacherEntity(TeacherDTO teacher) {
+		super(1, UUID.randomUUID().toString(), teacher.getName(), teacher.getLastName(), teacher.getAddress(),
+				teacher.getPhoneNumber(), teacher.getJmbg(), teacher.getEmail(), teacher.getBirthDate(),
+				new ArrayList<>());
+		this.subjects = new ArrayList<>();
+		this.marks = new ArrayList<>();
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)

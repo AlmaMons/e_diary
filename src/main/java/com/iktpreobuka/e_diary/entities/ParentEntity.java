@@ -45,7 +45,7 @@ public class ParentEntity extends PersonEntity {
 		setEmail(p.getEmail());
 		setJmbg(p.getJmbg());
 		setPhoneNumber(p.getPhoneNumber());
-//		setStudents(p.getStudents());
+		setStudents(p.getStudents());
 //		setUsers(p.getUsers());
 	}
 

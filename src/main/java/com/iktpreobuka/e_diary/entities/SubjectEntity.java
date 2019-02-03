@@ -2,6 +2,7 @@ package com.iktpreobuka.e_diary.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iktpreobuka.e_diary.entities.dto.SubjectDTO;
 
 @Entity
 @Table(name = "subject")
@@ -52,6 +54,18 @@ public class SubjectEntity {
 		this.marks = marks;
 		this.teachers = teachers;
 	}
+	
+	public SubjectEntity (SubjectDTO subject, SchoolYearEntity sy) {
+		super();
+		this.version = 1;
+		this.code = UUID.randomUUID().toString();
+		this.name = subject.getName();
+		this.fond = subject.getFond();
+		this.classes = new ArrayList<>();
+		this.schoolYear = sy;
+		this.marks = new ArrayList<>();
+		this.teachers = new ArrayList<>();
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -71,12 +85,12 @@ public class SubjectEntity {
 		return code;
 	}
 
-	@Column(name = "name")
+	@Column(name = "name",  nullable = false)
 	public String getName() {
 		return name;
 	}
 
-	@Column(name = "fond")
+	@Column(name = "fond",  nullable = false)
 	public Integer getFond() {
 		return fond;
 	}

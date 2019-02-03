@@ -3,6 +3,7 @@ package com.iktpreobuka.e_diary.entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iktpreobuka.e_diary.entities.dto.SemesterDTO;
 
 @Entity
 @Table (name = "semester")
@@ -49,6 +51,17 @@ public class SemesterEntity {
 		this.dateTo = dateTo;
 		this.schoolYear = schoolYear;
 		this.marks = marks;
+	}
+	
+	public SemesterEntity (SemesterDTO s, SchoolYearEntity sy) {
+		super();
+		this.version = 1;
+		this.code = UUID.randomUUID().toString();
+		this.orderNumber = s.getOrderNumber();
+		this.dateFrom = s.getDateFrom();
+		this.dateTo = s.getDateTo();
+		this.schoolYear = sy;
+		this.marks = new ArrayList<>();
 	}
 
 	@Id

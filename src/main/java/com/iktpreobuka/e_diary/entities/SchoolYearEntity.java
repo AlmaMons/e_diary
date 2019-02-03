@@ -2,6 +2,7 @@ package com.iktpreobuka.e_diary.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+
+import com.iktpreobuka.e_diary.entities.dto.SchoolYearDTO;
 
 @Entity
 @Table (name = "school_year")
@@ -43,6 +46,16 @@ public class SchoolYearEntity {
 		this.semesters = semesters;
 		this.subjects = subjects;
 	}
+	
+	public SchoolYearEntity (SchoolYearDTO schoolYear) {
+		super();
+		this.version = 1;
+		this.code = UUID.randomUUID().toString();
+		this.year = schoolYear.getYear();
+		this.classes = new ArrayList<>();
+		this.semesters = new ArrayList<>();
+		this.subjects = new ArrayList<>();
+	}
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
@@ -62,7 +75,7 @@ public class SchoolYearEntity {
 		return code;
 	}
 	
-	@Column (name = "year")
+	@Column (name = "year", nullable = false)
 	public String getYear() {
 		return year;
 	}
