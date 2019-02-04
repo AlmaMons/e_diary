@@ -3,7 +3,9 @@ package com.iktpreobuka.e_diary.entities.dto;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import com.iktpreobuka.e_diary.entities.ClassEntity;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.SemesterEntity;
@@ -13,7 +15,8 @@ public class SchoolYearDTO {
 	
 	private Long id;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
+	@NotNull(message = "Year must be provided!")
+	@Pattern(regexp = "^(20[0-9][0-9])/(20[0-9][0-9])$", message = "School year must be in format yyyy/yyyy!")
 	private String year;
 
 	private ArrayList<Long> classIDs;
@@ -38,6 +41,8 @@ public class SchoolYearDTO {
 		this.semestersIDs = (ArrayList<Long>) schoolYear.getSemesters().stream().map(SemesterEntity::getId).collect(Collectors.toList());
 		this.subjectsIDs = (ArrayList<Long>) schoolYear.getSubjects().stream().map(SubjectEntity::getId).collect(Collectors.toList());
 	}
+	
+	
 	
 	public Long getId() {
 		return id;

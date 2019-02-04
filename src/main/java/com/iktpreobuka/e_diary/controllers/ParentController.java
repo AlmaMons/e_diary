@@ -51,7 +51,6 @@ public class ParentController {
 		} catch (Exception e) {
 			return new ResponseEntity<RESTError>(new RESTError("Parent not found!"), HttpStatus.NOT_FOUND);
 		}
-		
 	}
 
 	// POST

@@ -15,10 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.iktpreobuka.e_diary.entities.dto.SchoolYearDTO;
 
 @Entity
 @Table (name = "school_year")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SchoolYearEntity {
 	
 	private Long id;
@@ -55,6 +57,10 @@ public class SchoolYearEntity {
 		this.classes = new ArrayList<>();
 		this.semesters = new ArrayList<>();
 		this.subjects = new ArrayList<>();
+	}
+	
+	public void updateYear (SchoolYearEntity sy) {
+		setYear(sy.getYear());
 	}
 
 	@Id
