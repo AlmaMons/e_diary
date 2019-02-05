@@ -42,6 +42,16 @@ public class TeacherEntity extends PersonEntity {
 		this.subjects = new ArrayList<>();
 		this.marks = new ArrayList<>();
 	}
+	
+	public void updateTeacher(TeacherEntity t) {
+		setAddress(t.getAddress());
+		setBirthDate(t.getBirthDate());
+		setName(t.getName());
+		setLastName(t.getLastName()); 
+		setEmail(t.getEmail());
+		setJmbg(t.getJmbg());
+		setPhoneNumber(t.getPhoneNumber());
+	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JoinTable(name = "subject_teacher", joinColumns = {

@@ -27,7 +27,7 @@ public class ParentController {
 	@Autowired
 	private ParentServiceImpl parentService;
 
-	// GET
+	// GET ALL
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ParentDTO>> getAllParents() {
 		List<ParentDTO> parentsDto = new ArrayList<>(); 
@@ -103,7 +103,6 @@ public class ParentController {
 		} catch (Exception e) {
 			return new ResponseEntity<RESTError>(new RESTError("Can't delete that parent"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 	}
 
 

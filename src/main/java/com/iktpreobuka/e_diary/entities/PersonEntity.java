@@ -22,21 +22,13 @@ public abstract class PersonEntity {
 	protected Long id;
 
 	protected Integer version;
-
 	protected String code;
-
 	protected String name;
-
 	protected String lastName;
-
 	protected String address;
-
 	protected String phoneNumber;
-
 	protected String jmbg;
-
 	protected String email;
-
 	protected Date birthDate;
 
 	protected List<UserEntity> users;
