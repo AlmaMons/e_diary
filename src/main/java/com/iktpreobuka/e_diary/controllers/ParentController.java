@@ -101,7 +101,7 @@ public class ParentController {
 			}
 			
 		} catch (Exception e) {
-			return new ResponseEntity<RESTError>(new RESTError("Id not valid"), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<RESTError>(new RESTError("Can't delete that parent"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}

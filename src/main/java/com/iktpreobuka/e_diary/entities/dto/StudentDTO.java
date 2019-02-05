@@ -82,7 +82,7 @@ public class StudentDTO {
 		// od liste objekata ocena [ocena1, ocena2] pravi listu id-eva [1, 2, 3]
 		this.marksIDs = (ArrayList<Long>) student.getMark().stream().map(MarkEntity::getId).collect(Collectors.toList());
 		this.parentID = student.getParent().getId();
-		//this.classID = student.getClas().getId();
+		this.classID = (student.getClas()== null) ? null : student.getClas().getId();
 
 	}
 

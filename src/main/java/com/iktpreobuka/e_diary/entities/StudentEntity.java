@@ -57,7 +57,7 @@ public class StudentEntity extends PersonEntity {
 		setUsers(s.getUsers());
 	}
 
-	//referencedColumnName="id"
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn (name = "parent", nullable = false)
 	public ParentEntity getParent() {

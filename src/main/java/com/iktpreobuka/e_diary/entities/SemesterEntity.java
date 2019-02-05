@@ -18,7 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iktpreobuka.e_diary.entities.dto.SemesterDTO;
 
 @Entity
@@ -63,6 +62,14 @@ public class SemesterEntity {
 		this.schoolYear = sy;
 		this.marks = new ArrayList<>();
 	}
+	
+	public void updateSemester (SemesterEntity s) {
+		setOrderNumber(s.getOrderNumber());
+		setDateFrom(s.getDateFrom());
+		setDateTo(s.getDateTo());
+		setSchoolYear(s.getSchoolYear());
+		setMarks(s.getMarks());
+	}
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
@@ -82,24 +89,23 @@ public class SemesterEntity {
 		return code;
 	}
 	
-	@Column (name = "order_number")
+	@Column (name = "order_number", nullable = false)
 	public Integer getOrderNumber() {
 		return orderNumber;
 	}
 	
-	@Column (name = "date_from")
+	@Column (name = "date_from", nullable = false)
 	public Date getDateFrom() {
 		return dateFrom;
 	}
 	
-	@Column (name = "date_to")
+	@Column (name = "date_to", nullable = false)
 	public Date getDateTo() {
 		return dateTo;
 	}
-	//DTO
-	@JsonIgnore
+	
 	@ManyToOne (cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn (name = "school_year")
+	@JoinColumn (name = "school_year", nullable = false)
 	public SchoolYearEntity getSchoolYear() {
 		return schoolYear;
 	}

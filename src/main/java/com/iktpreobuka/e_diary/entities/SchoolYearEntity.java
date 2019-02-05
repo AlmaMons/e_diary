@@ -58,10 +58,6 @@ public class SchoolYearEntity {
 		this.semesters = new ArrayList<>();
 		this.subjects = new ArrayList<>();
 	}
-	
-	public void updateYear (SchoolYearEntity sy) {
-		setYear(sy.getYear());
-	}
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
@@ -81,7 +77,7 @@ public class SchoolYearEntity {
 		return code;
 	}
 	
-	@Column (name = "year", nullable = false)
+	@Column (name = "year", nullable = false, unique = true)
 	public String getYear() {
 		return year;
 	}

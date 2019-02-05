@@ -21,12 +21,15 @@ public class SemesterDTO {
 	@Range (min = 1, max = 2, message = "Order number must be {min} or {max}!")
 	private Integer orderNumber;
 	
+	@NotNull (message="Date from must be provided!")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Europe/Belgrade")
 	private Date dateFrom;
 	
+	@NotNull (message="Date to must be provided!")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Europe/Belgrade")
 	private Date dateTo;
 	
+	@NotNull (message="You have to add a school year!")
 	private Long schoolYearID;
 	private ArrayList<Long> marksIDs;
 	

@@ -46,8 +46,6 @@ public class ParentEntity extends PersonEntity {
 		setEmail(p.getEmail());
 		setJmbg(p.getJmbg());
 		setPhoneNumber(p.getPhoneNumber());
-		setStudents(p.getStudents());
-		setUsers(p.getUsers());
 	}
 
 	@OneToMany (mappedBy = "parent", fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})

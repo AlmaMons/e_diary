@@ -49,7 +49,7 @@ public class SchoolYearServiceImpl implements SchoolYearService {
 		try {
 			Optional<SchoolYearEntity> sy = yearRepo.findById(id);
 			SchoolYearEntity y = sy.get();
-			y.updateYear(year);
+			y.setYear(year.getYear());
 			return yearRepo.save(y);
 		} catch (Exception e) {
 			return null;

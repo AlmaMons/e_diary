@@ -6,4 +6,5 @@ import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 
 public interface SchoolYearRepository extends CrudRepository<SchoolYearEntity, Long> {
 
+
 }

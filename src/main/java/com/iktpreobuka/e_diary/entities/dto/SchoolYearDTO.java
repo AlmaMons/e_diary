@@ -16,7 +16,7 @@ public class SchoolYearDTO {
 	private Long id;
 
 	@NotNull(message = "Year must be provided!")
-	@Pattern(regexp = "^(20[0-9][0-9])/(20[0-9][0-9])$", message = "School year must be in format yyyy/yyyy!")
+	@Pattern(regexp = "^(20[0-9][0-9])/(20[0-9][0-9])$", message = "School year must be in format 20yy/20yy!")
 	private String year;
 
 	private ArrayList<Long> classIDs;
