@@ -48,7 +48,6 @@ public class StudentController {
 	// GET BY ID
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getStudentById(@PathVariable Long id) {
-
 		try {
 			StudentEntity s = studentService.findStudentById(id);
 			StudentDTO dto = new StudentDTO(s);
@@ -56,7 +55,6 @@ public class StudentController {
 		} catch (Exception e) {
 			return new ResponseEntity<RESTError>(new RESTError("Student not found!"), HttpStatus.NOT_FOUND);
 		}
-
 	}
 
 	// POST
@@ -114,7 +112,6 @@ public class StudentController {
 		} catch (Exception e) {
 			return new ResponseEntity<RESTError>(new RESTError("Can't delete that student"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 	}
 
 }

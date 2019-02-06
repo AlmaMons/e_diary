@@ -27,8 +27,10 @@ public class SubjectDTO {
 	private Integer fond;
 
 	private ArrayList<Long> classesIDs;
+	@NotNull(message = "School year must be provided!")
 	private Long schoolYearID;
 	private ArrayList<Long> marksIDs;
+//	@NotNull(message = "Teachers must be provided!")
 	private ArrayList<Long> teachersIDs;
 
 	public SubjectDTO(Long id, String name, Integer fond, ArrayList<Long> classesIDs, Long schoolYearID,

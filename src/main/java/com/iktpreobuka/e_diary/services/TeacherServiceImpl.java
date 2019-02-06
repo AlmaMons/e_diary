@@ -1,5 +1,6 @@
 package com.iktpreobuka.e_diary.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,21 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 	}
 
+	// Get all teachers id - subjects
+	public ArrayList<TeacherEntity> getAllTeachersByID(ArrayList<Long> ids) {
+		ArrayList<TeacherEntity> teachers = new ArrayList<>();
+
+		for (Long teacherId : ids) {
+			Optional<TeacherEntity> indbTeacher = teacherRepo.findById(teacherId);
+			if (indbTeacher.isPresent()) {
+				teachers.add(indbTeacher.get());
+			} else {
+				return null;
+			}
+		}
+		return teachers;
+	}
+
 	// POST
 	@Override
 	public TeacherEntity saveTeacher(TeacherEntity teacher) {
@@ -55,16 +71,16 @@ public class TeacherServiceImpl implements TeacherService {
 			return null;
 		}
 	}
-	
+
 	// DELETE
-		@Override
-		public boolean removeTeacher(Long id) {
-			Optional<TeacherEntity> t = teacherRepo.findById(id);
-			if (t.isPresent()) {
-				teacherRepo.deleteById(id);
-				return true;
-			}
-			return false;
+	@Override
+	public boolean removeTeacher(Long id) {
+		Optional<TeacherEntity> t = teacherRepo.findById(id);
+		if (t.isPresent()) {
+			teacherRepo.deleteById(id);
+			return true;
 		}
+		return false;
+	}
 
 }

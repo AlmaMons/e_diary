@@ -19,7 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iktpreobuka.e_diary.entities.dto.SubjectDTO;
 
 @Entity
@@ -54,8 +53,8 @@ public class SubjectEntity {
 		this.marks = marks;
 		this.teachers = teachers;
 	}
-	
-	public SubjectEntity (SubjectDTO subject, SchoolYearEntity sy) {
+
+	public SubjectEntity(SubjectDTO subject, SchoolYearEntity sy) {
 		super();
 		this.version = 1;
 		this.code = UUID.randomUUID().toString();
@@ -66,6 +65,21 @@ public class SubjectEntity {
 		this.marks = new ArrayList<>();
 		this.teachers = new ArrayList<>();
 	}
+
+	public SubjectEntity(SubjectDTO subject, SchoolYearEntity sy, ArrayList<TeacherEntity> teachers) {
+		super();
+		this.version = 1;
+		this.code = UUID.randomUUID().toString();
+		this.name = subject.getName();
+		this.fond = subject.getFond();
+		this.classes = new ArrayList<>();
+		this.schoolYear = sy;
+		this.marks = new ArrayList<>();
+		this.teachers = teachers;
+	}
+	
+	
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -85,20 +99,18 @@ public class SubjectEntity {
 		return code;
 	}
 
-	@Column(name = "name",  nullable = false)
+	@Column(name = "name", nullable = false, unique = true)
 	public String getName() {
 		return name;
 	}
 
-	@Column(name = "fond",  nullable = false)
+	@Column(name = "fond", nullable = false)
 	public Integer getFond() {
 		return fond;
 	}
 
-	// DTO
-	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn(name = "schoolYear")
+	@JoinColumn(name = "schoolYear", nullable = false)
 	public SchoolYearEntity getSchoolYear() {
 		return schoolYear;
 	}
@@ -158,6 +170,18 @@ public class SubjectEntity {
 
 	public void setFond(Integer fond) {
 		this.fond = fond;
+	}
+	
+	public void updateSubject(SubjectEntity s) {
+		setFond(s.getFond());
+		setMarks(s.getMarks());
+		setCode(s.getCode());
+		setName(s.getName());
+		setClasses(s.getClasses());
+		setSchoolYear(s.getSchoolYear());
+		setTeachers(s.getTeachers());
+		setVersion(s.getVersion());
+		
 	}
 
 }

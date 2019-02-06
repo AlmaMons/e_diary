@@ -55,7 +55,6 @@ public class SemesterController {
 		} catch (Exception e) {
 			return new ResponseEntity<RESTError>(new RESTError("Semester not found!"), HttpStatus.NOT_FOUND);
 		}
-
 	}
 
 	// POST
