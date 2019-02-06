@@ -1,5 +1,6 @@
 package com.iktpreobuka.e_diary.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,22 @@ public class SubjectServiceImpl implements SubjectService {
 			return true;
 		}
 		return false;
+	}
+
+	// List of all subjects ids for put method in teacher controller
+	@Override
+	public ArrayList<SubjectEntity> getAllSubjectsByID(ArrayList<Long> ids) {
+		ArrayList<SubjectEntity> subjects = new ArrayList<>();
+
+		for (Long subjectId : ids) {
+			Optional<SubjectEntity> indbSubjects = subjectRepo.findById(subjectId);
+			if (indbSubjects.isPresent()) {
+				subjects.add(indbSubjects.get());
+			} else {
+				return null;
+			}
+		}
+		return subjects;
 	}
 
 

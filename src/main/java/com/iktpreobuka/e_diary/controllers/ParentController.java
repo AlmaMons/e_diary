@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iktpreobuka.e_diary.entities.ParentEntity;
 import com.iktpreobuka.e_diary.entities.dto.ParentDTO;
-import com.iktpreobuka.e_diary.services.ParentServiceImpl;
+import com.iktpreobuka.e_diary.services.ParentService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
@@ -25,7 +25,7 @@ import com.iktpreobuka.e_diary.util.RESTError;
 public class ParentController {
 
 	@Autowired
-	private ParentServiceImpl parentService;
+	private ParentService parentService;
 
 	// GET ALL
 	@RequestMapping(method = RequestMethod.GET)

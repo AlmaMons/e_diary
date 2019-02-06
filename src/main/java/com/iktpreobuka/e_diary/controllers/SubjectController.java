@@ -19,9 +19,9 @@ import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.TeacherEntity;
 import com.iktpreobuka.e_diary.entities.dto.SubjectDTO;
-import com.iktpreobuka.e_diary.services.SchoolYearServiceImpl;
-import com.iktpreobuka.e_diary.services.SubjectServiceImpl;
-import com.iktpreobuka.e_diary.services.TeacherServiceImpl;
+import com.iktpreobuka.e_diary.services.SchoolYearService;
+import com.iktpreobuka.e_diary.services.SubjectService;
+import com.iktpreobuka.e_diary.services.TeacherService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
@@ -29,13 +29,13 @@ import com.iktpreobuka.e_diary.util.RESTError;
 public class SubjectController {
 
 	@Autowired
-	private SchoolYearServiceImpl yearService;
+	private SchoolYearService yearService;
 
 	@Autowired
-	private TeacherServiceImpl teacherService;
+	private TeacherService teacherService;
 
 	@Autowired
-	private SubjectServiceImpl subjectService;
+	private SubjectService subjectService;
 
 	// GET ALL
 	@RequestMapping(method = RequestMethod.GET)

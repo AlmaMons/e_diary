@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.TeacherEntity;
 import com.iktpreobuka.e_diary.entities.dto.TeacherDTO;
-import com.iktpreobuka.e_diary.services.TeacherServiceImpl;
+import com.iktpreobuka.e_diary.services.SubjectService;
+import com.iktpreobuka.e_diary.services.TeacherService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
@@ -25,7 +27,10 @@ import com.iktpreobuka.e_diary.util.RESTError;
 public class TeacherController {
 
 	@Autowired
-	private TeacherServiceImpl teacherService;
+	private TeacherService teacherService;
+
+	@Autowired
+	private SubjectService subjectService;
 
 	// GET ALL
 	@RequestMapping(method = RequestMethod.GET)
@@ -69,7 +74,7 @@ public class TeacherController {
 		}
 	}
 
-	// PUT, da li treba dozvoliti da menja i predmete
+	// PUT
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> updateItem(@Valid @RequestBody TeacherDTO teacherDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -78,7 +83,12 @@ public class TeacherController {
 			return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
 		} else {
 			try {
-				TeacherEntity teacher = new TeacherEntity(teacherDTO);
+				ArrayList<SubjectEntity> subjects = subjectService.getAllSubjectsByID(teacherDTO.getSubjectsIDs());
+				if (subjects == null) {
+					return new ResponseEntity<>(("Error has occured! Subjects not found!"), HttpStatus.BAD_REQUEST);
+				}
+
+				TeacherEntity teacher = new TeacherEntity(teacherDTO, subjects);
 				TeacherDTO updateTeacher = new TeacherDTO(teacherService.updateTeacher(teacher, id));
 				return new ResponseEntity<>(updateTeacher, HttpStatus.OK);
 			} catch (Exception e) {

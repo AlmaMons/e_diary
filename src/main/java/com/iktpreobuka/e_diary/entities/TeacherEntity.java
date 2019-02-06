@@ -43,6 +43,19 @@ public class TeacherEntity extends PersonEntity {
 		this.marks = new ArrayList<>();
 	}
 	
+	public TeacherEntity(TeacherDTO teacher, ArrayList<SubjectEntity> subjects) {
+		super();
+		this.name = teacher.getName();
+		this.lastName = teacher.getLastName();
+		this.address = teacher.getAddress();
+		this.phoneNumber = teacher.getPhoneNumber();
+		this.jmbg = teacher.getJmbg();
+		this.email = teacher.getEmail();
+		this.birthDate = teacher.getBirthDate();
+		this.subjects = subjects;
+		this.marks = new ArrayList<>();
+	}
+	
 	public void updateTeacher(TeacherEntity t) {
 		setAddress(t.getAddress());
 		setBirthDate(t.getBirthDate());
@@ -51,7 +64,11 @@ public class TeacherEntity extends PersonEntity {
 		setEmail(t.getEmail());
 		setJmbg(t.getJmbg());
 		setPhoneNumber(t.getPhoneNumber());
+		setMarks(t.getMarks());
+		setSubjects(t.getSubjects());
 	}
+	
+	
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JoinTable(name = "subject_teacher", joinColumns = {

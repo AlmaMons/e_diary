@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.dto.SchoolYearDTO;
-import com.iktpreobuka.e_diary.services.SchoolYearServiceImpl;
+import com.iktpreobuka.e_diary.services.SchoolYearService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
@@ -25,7 +25,7 @@ import com.iktpreobuka.e_diary.util.RESTError;
 public class SchoolYearController {
 	
 	@Autowired
-	private SchoolYearServiceImpl yearService;
+	private SchoolYearService yearService;
 	
 	//GET
 	@RequestMapping(method = RequestMethod.GET)

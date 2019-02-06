@@ -34,21 +34,6 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 	}
 
-	// Get all teachers id - subjects
-	public ArrayList<TeacherEntity> getAllTeachersByID(ArrayList<Long> ids) {
-		ArrayList<TeacherEntity> teachers = new ArrayList<>();
-
-		for (Long teacherId : ids) {
-			Optional<TeacherEntity> indbTeacher = teacherRepo.findById(teacherId);
-			if (indbTeacher.isPresent()) {
-				teachers.add(indbTeacher.get());
-			} else {
-				return null;
-			}
-		}
-		return teachers;
-	}
-
 	// POST
 	@Override
 	public TeacherEntity saveTeacher(TeacherEntity teacher) {
@@ -81,6 +66,21 @@ public class TeacherServiceImpl implements TeacherService {
 			return true;
 		}
 		return false;
+	}
+	
+	// List of all teachers ids for put method in subjects
+	public ArrayList<TeacherEntity> getAllTeachersByID(ArrayList<Long> ids) {
+		ArrayList<TeacherEntity> teachers = new ArrayList<>();
+
+		for (Long teacherId : ids) {
+			Optional<TeacherEntity> indbTeacher = teacherRepo.findById(teacherId);
+			if (indbTeacher.isPresent()) {
+				teachers.add(indbTeacher.get());
+			} else {
+				return null;
+			}
+		}
+		return teachers;
 	}
 
 }

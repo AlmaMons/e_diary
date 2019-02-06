@@ -68,8 +68,8 @@ public class SubjectEntity {
 
 	public SubjectEntity(SubjectDTO subject, SchoolYearEntity sy, ArrayList<TeacherEntity> teachers) {
 		super();
-		this.version = 1;
-		this.code = UUID.randomUUID().toString();
+//		this.version = 1;
+//		this.code = UUID.randomUUID().toString();
 		this.name = subject.getName();
 		this.fond = subject.getFond();
 		this.classes = new ArrayList<>();

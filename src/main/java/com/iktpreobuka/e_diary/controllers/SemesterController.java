@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.SemesterEntity;
 import com.iktpreobuka.e_diary.entities.dto.SemesterDTO;
-import com.iktpreobuka.e_diary.services.SchoolYearServiceImpl;
-import com.iktpreobuka.e_diary.services.SemesterServiceImpl;
+import com.iktpreobuka.e_diary.services.SchoolYearService;
+import com.iktpreobuka.e_diary.services.SemesterService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
@@ -27,10 +27,10 @@ import com.iktpreobuka.e_diary.util.RESTError;
 public class SemesterController {
 
 	@Autowired
-	private SchoolYearServiceImpl yearService;
+	private SchoolYearService yearService;
 
 	@Autowired
-	private SemesterServiceImpl semesterService;
+	private SemesterService semesterService;
 
 	// GET ALL
 	@RequestMapping(method = RequestMethod.GET)

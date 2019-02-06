@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iktpreobuka.e_diary.entities.ParentEntity;
 import com.iktpreobuka.e_diary.entities.StudentEntity;
 import com.iktpreobuka.e_diary.entities.dto.StudentDTO;
-import com.iktpreobuka.e_diary.services.ParentServiceImpl;
-import com.iktpreobuka.e_diary.services.StudentServiceImpl;
+import com.iktpreobuka.e_diary.services.ParentService;
+import com.iktpreobuka.e_diary.services.StudentService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
@@ -27,10 +27,10 @@ import com.iktpreobuka.e_diary.util.RESTError;
 public class StudentController {
 
 	@Autowired
-	private StudentServiceImpl studentService;
+	private StudentService studentService;
 
 	@Autowired
-	private ParentServiceImpl parentService;
+	private ParentService parentService;
 
 	// GET
 	@RequestMapping(method = RequestMethod.GET)
