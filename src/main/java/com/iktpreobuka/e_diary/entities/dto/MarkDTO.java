@@ -19,7 +19,7 @@ public class MarkDTO {
 	@Max(value = 5, message = "Mark must be max {max}!")
 	private Integer mark;
 
-	@NotNull(message = "Date of mark must be provided!")
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Belgrade")
 	private Date date;
 

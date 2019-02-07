@@ -8,13 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.iktpreobuka.e_diary.entities.ClassEntity;
+import com.iktpreobuka.e_diary.entities.StudentEntity;
 import com.iktpreobuka.e_diary.repositories.ClassRepository;
+import com.iktpreobuka.e_diary.repositories.StudentRepository;
 
 @Service
 public class ClassServiceImpl implements ClassService {
 
 	@Autowired
 	private ClassRepository classRepo;
+	
+	@Autowired
+	private StudentRepository studRepo;
 
 	// GET ALL
 	@Override
@@ -53,12 +58,21 @@ public class ClassServiceImpl implements ClassService {
 	}
 
 	// PUT
-	public ClassEntity editClass(ClassEntity clas, Long id) {
+	public ClassEntity editClass(ClassEntity clas, Long id, ArrayList<StudentEntity> studs) {
 		try {
 			Optional<ClassEntity> op = classRepo.findById(id);
 			ClassEntity c = op.get();
 			c.updateClass(clas);
-			return classRepo.save(c);
+			
+			ClassEntity ret = classRepo.save(c);
+			
+			for (StudentEntity s : studs) {
+				s.setClas(ret);
+				studRepo.save(s);
+			}
+			
+			
+			return ret;
 		} catch (Exception e) {
 			return null;
 		}

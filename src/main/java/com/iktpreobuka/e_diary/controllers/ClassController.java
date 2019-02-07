@@ -27,22 +27,21 @@ import com.iktpreobuka.e_diary.services.SubjectService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
-@RequestMapping ( path = "/api/v1/classes")
+@RequestMapping(path = "/api/v1/classes")
 public class ClassController {
-	
+
 	@Autowired
 	private ClassService classService;
-	
+
 	@Autowired
 	private SchoolYearService yearService;
-	
+
 	@Autowired
 	private SubjectService subjectService;
-	
+
 	@Autowired
 	private StudentService studentService;
-	
-	
+
 	// GET ALL
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClassDTO>> getAllClasses() {
@@ -54,7 +53,7 @@ public class ClassController {
 		}
 		return new ResponseEntity<>(classDto, HttpStatus.OK);
 	}
-	
+
 	// GET BY ID
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getClassById(@PathVariable Long id) {
@@ -67,75 +66,77 @@ public class ClassController {
 			return new ResponseEntity<RESTError>(new RESTError("Class not found!"), HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	// POST
-		@RequestMapping(method = RequestMethod.POST)
-		public ResponseEntity<?> saveClass(@Valid @RequestBody ClassDTO classDTO, BindingResult result) {
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<?> saveClass(@Valid @RequestBody ClassDTO classDTO, BindingResult result) {
 
-			if (result.hasErrors()) {
-				return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
-			} else {
-				try {
-					SchoolYearEntity sy = yearService.findYearById(classDTO.getSchoolYearID());
-					if (sy == null) {
-						return new ResponseEntity<>(("School year doesn't exist!"), HttpStatus.BAD_REQUEST);
-					}
-
-					ClassEntity s = new ClassEntity(classDTO, sy);
-					ClassDTO newClass = new ClassDTO(classService.saveClass(s));
-					return new ResponseEntity<>(newClass, HttpStatus.CREATED);
-				} catch (Exception e) {
-					return new ResponseEntity<>(("Class alredy exists!"), HttpStatus.BAD_REQUEST);
-				}
-			}
-		}
-		
-		// PUT
-		@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-		public ResponseEntity<?> editClass(@Valid @RequestBody ClassDTO classDTO, BindingResult result,
-				@PathVariable("id") Long id) {
-
-			if (result.hasErrors()) {
-				return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
-			} else {
-				try {
-					SchoolYearEntity sy = yearService.findYearById(classDTO.getSchoolYearID());
-					if (sy == null) {
-						return new ResponseEntity<>(("School year doesn't exist!"), HttpStatus.BAD_REQUEST);
-					}
-					// predmet
-					ArrayList<SubjectEntity> subjects = subjectService.getAllSubjectsByID(classDTO.getSubjectsIDs());
-					if (subjects == null) {
-						return new ResponseEntity<>(("Error has occured! Subjects not found!"), HttpStatus.BAD_REQUEST);
-					}
-					
-					//ucenici
-					ArrayList<StudentEntity> students = studentService.getAllStudentsByID(classDTO.getStudentsIDs());
-					if (students == null) {
-						return new ResponseEntity<>(("Error has occured! Student not found!"), HttpStatus.BAD_REQUEST);
-					}
-
-					ClassEntity c = new ClassEntity(classDTO, sy, subjects, students);
-					ClassDTO newClass = new ClassDTO(classService.editClass(c, id));
-					return new ResponseEntity<>(newClass, HttpStatus.CREATED);
-				} catch (Exception e) {
-					return new ResponseEntity<>(("Class alredy exists!"), HttpStatus.BAD_REQUEST);
-				}
-			}
-		}
-
-		// DELETE
-		@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-		public ResponseEntity<?> deleteClass(@PathVariable Long id) {
+		if (result.hasErrors()) {
+			return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
+		} else {
 			try {
-				if(classService.removeClass(id))
-					{return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);}
-				else {
-					return new ResponseEntity<RESTError>(new RESTError("Class not found!"), HttpStatus.NOT_FOUND);
+				SchoolYearEntity sy = yearService.findYearById(classDTO.getSchoolYearID());
+				if (sy == null) {
+					return new ResponseEntity<>(("School year doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
+
+				ClassEntity s = new ClassEntity(classDTO, sy);
+				ClassDTO newClass = new ClassDTO(classService.saveClass(s));
+				return new ResponseEntity<>(newClass, HttpStatus.CREATED);
 			} catch (Exception e) {
-				return new ResponseEntity<RESTError>(new RESTError("Can't delete that class"), HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>(("Class alredy exists!"), HttpStatus.BAD_REQUEST);
 			}
 		}
-		
+	}
+
+	// PUT
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+	public ResponseEntity<?> editClass(@Valid @RequestBody ClassDTO classDTO, BindingResult result,
+			@PathVariable("id") Long id) {
+
+		if (result.hasErrors()) {
+			return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
+		} else {
+			try {
+				SchoolYearEntity sy = yearService.findYearById(classDTO.getSchoolYearID());
+				if (sy == null) {
+					return new ResponseEntity<>(("School year doesn't exist!"), HttpStatus.BAD_REQUEST);
+				}
+
+				ArrayList<SubjectEntity> subjects = subjectService.getAllSubjectsByID(classDTO.getSubjectsIDs());
+				if (subjects == null) {
+					return new ResponseEntity<>(("Error has occured! Subjects not found!"), HttpStatus.BAD_REQUEST);
+				}
+
+				ArrayList<StudentEntity> students = studentService.getAllStudentsByID(classDTO.getStudentsIDs());
+				if (students == null) {
+					return new ResponseEntity<>(("Error has occured! Student not found!"), HttpStatus.BAD_REQUEST);
+				}
+
+				ClassEntity c = new ClassEntity(classDTO, sy, subjects, students);
+				ClassEntity cls = classService.editClass(c, id, students);
+				ClassDTO newClass = new ClassDTO(cls);
+
+				return new ResponseEntity<>(newClass, HttpStatus.CREATED);
+			} catch (Exception e) {
+				return new ResponseEntity<>(("Class alredy exists!"), HttpStatus.BAD_REQUEST);
+			}
+		}
+	}
+
+	// DELETE
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	public ResponseEntity<?> deleteClass(@PathVariable Long id) {
+		try {
+			if (classService.removeClass(id)) {
+				return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<RESTError>(new RESTError("Class not found!"), HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<RESTError>(new RESTError("Can't delete that class"),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

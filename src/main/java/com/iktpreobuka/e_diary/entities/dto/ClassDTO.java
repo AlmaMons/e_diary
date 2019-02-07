@@ -101,4 +101,12 @@ public class ClassDTO {
 		this.subjectsIDs = subjectsIDs;
 	}
 
+	@Override
+	public String toString() {
+		return "ClassDTO [id=" + id + ", clas=" + clas + ", department=" + department + ", studentsIDs=" + studentsIDs
+				+ ", schoolYearID=" + schoolYearID + ", subjectsIDs=" + subjectsIDs + "]";
+	}
+	
+	
+
 }

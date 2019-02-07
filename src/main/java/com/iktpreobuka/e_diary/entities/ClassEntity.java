@@ -32,9 +32,9 @@ public class ClassEntity {
 	private String clas;
 	private Integer department;
 
-	private List<StudentEntity> students = new ArrayList<>();
+	private List<StudentEntity> students;
 	private SchoolYearEntity schoolYear;
-	private List<SubjectEntity> subject = new ArrayList<>();
+	private List<SubjectEntity> subject ;
 
 	public ClassEntity() {
 		super();
@@ -77,7 +77,7 @@ public class ClassEntity {
 		setClas(c.getClas());
 		setDepartment(c.getDepartment());
 		setSchoolYear(c.getSchoolYear());
-		setSchoolYear(c.getSchoolYear());
+		setStudents(c.getStudents());
 		setSubject(c.getSubject());
 	}
 
@@ -160,4 +160,11 @@ public class ClassEntity {
 		this.schoolYear = schoolYear;
 	}
 
+	@Override
+	public String toString() {
+		return "ClassEntity [clas=" + clas + ", department=" + department + ", subject=" + subject + "]";
+	}
+
+	
+	
 }

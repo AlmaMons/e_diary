@@ -68,24 +68,23 @@ public class SubjectEntity {
 
 	public SubjectEntity(SubjectDTO subject, SchoolYearEntity sy, ArrayList<TeacherEntity> teachers, ArrayList<ClassEntity> clas) {
 		super();
+		
 		this.name = subject.getName();
 		this.fond = subject.getFond();
 		this.classes = clas;
 		this.schoolYear = sy;
 		this.marks = new ArrayList<>();
 		this.teachers = teachers;
+		
 	}
 	
 	public void updateSubject(SubjectEntity s) {
 		setFond(s.getFond());
 		setMarks(s.getMarks());
-		setCode(s.getCode());
 		setName(s.getName());
 		setClasses(s.getClasses());
 		setSchoolYear(s.getSchoolYear());
 		setTeachers(s.getTeachers());
-		setVersion(s.getVersion());
-		
 	}
 	
 
@@ -179,6 +178,13 @@ public class SubjectEntity {
 	public void setFond(Integer fond) {
 		this.fond = fond;
 	}
+
+	@Override
+	public String toString() {
+		return "SubjectEntity [id=" + id + ", name=" + name + "]";
+	}
+
+
 	
 
 

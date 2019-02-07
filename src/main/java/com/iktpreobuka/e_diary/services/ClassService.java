@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.iktpreobuka.e_diary.entities.ClassEntity;
+import com.iktpreobuka.e_diary.entities.StudentEntity;
 
 public interface ClassService {
 	
@@ -13,7 +14,7 @@ public interface ClassService {
 	
 	public ClassEntity saveClass (ClassEntity clas);
 	
-	public ClassEntity editClass(ClassEntity clas, Long id);
+	public ClassEntity editClass(ClassEntity clas, Long id, ArrayList<StudentEntity> studs);
 	
 	public boolean removeClass (Long id);
 	

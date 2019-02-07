@@ -43,6 +43,7 @@ public class StudentEntity extends PersonEntity {
 				studentDTO.getPhoneNumber(), studentDTO.getJmbg(), studentDTO.getEmail(), studentDTO.getBirthDate(), new ArrayList<>());
 		this.parent = p;
 		this.marks = new ArrayList<>();
+		//ssthis.clas = new ArrayList<>();
 	}
 	
 	public void updateStudent (StudentEntity s) {
@@ -55,6 +56,7 @@ public class StudentEntity extends PersonEntity {
 		setPhoneNumber(s.getPhoneNumber());
 		setParent(s.getParent());
 		setUsers(s.getUsers());
+		
 	}
 
 	
@@ -85,6 +87,11 @@ public class StudentEntity extends PersonEntity {
 
 	public void setParent(ParentEntity parent) {
 		this.parent = parent;
+	}
+
+	@Override
+	public String toString() {
+		return "StudentEntity [parent=" + parent + ", clas=" + clas + "]";
 	}
 
 

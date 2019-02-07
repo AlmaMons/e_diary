@@ -67,6 +67,16 @@ public class MarkEntity {
 		this.semester = semester;
 		
 	}
+	
+	public void updateMark(MarkEntity m) {
+		setDate(m.getDate());
+		setMark(m.getMark());
+		setMarkType(m.getMarkType());
+		setSemester(m.getSemester());
+		setStudent(m.getStudent());
+		setSubject(m.getSubject());
+		setTeacher(m.getTeacher());
+	}
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
@@ -91,7 +101,7 @@ public class MarkEntity {
 		return mark;
 	}
 	
-	@Column (name = "date", nullable = false)
+	@Column (name = "date")
 	public Date getDate() {
 		return date;
 	}
