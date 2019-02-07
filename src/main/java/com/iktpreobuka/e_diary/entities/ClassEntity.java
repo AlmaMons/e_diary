@@ -21,7 +21,6 @@ import javax.persistence.Version;
 
 import com.iktpreobuka.e_diary.entities.dto.ClassDTO;
 
-
 @Entity
 @Table(name = "class")
 public class ClassEntity {
@@ -52,8 +51,8 @@ public class ClassEntity {
 		this.schoolYear = schoolYear;
 		this.subject = subject;
 	}
-	
-	public ClassEntity (ClassDTO clas, SchoolYearEntity sy) {
+
+	public ClassEntity(ClassDTO clas, SchoolYearEntity sy) {
 		super();
 		this.version = 1;
 		this.code = UUID.randomUUID().toString();
@@ -62,6 +61,24 @@ public class ClassEntity {
 		this.students = new ArrayList<>();
 		this.schoolYear = sy;
 		this.subject = new ArrayList<>();
+	}
+
+	public ClassEntity(ClassDTO clas, SchoolYearEntity sy, ArrayList<SubjectEntity> subject,
+			ArrayList<StudentEntity> students) {
+		super();
+		this.clas = clas.getClas();
+		this.department = clas.getDepartment();
+		this.students = students;
+		this.schoolYear = sy;
+		this.subject = subject;
+	}
+
+	public void updateClass(ClassEntity c) {
+		setClas(c.getClas());
+		setDepartment(c.getDepartment());
+		setSchoolYear(c.getSchoolYear());
+		setSchoolYear(c.getSchoolYear());
+		setSubject(c.getSubject());
 	}
 
 	@Id
@@ -98,7 +115,7 @@ public class ClassEntity {
 	}
 
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	@JoinColumn(name = "schoolYear")
+	@JoinColumn(name = "schoolYear", nullable = false)
 	public SchoolYearEntity getSchoolYear() {
 		return schoolYear;
 	}

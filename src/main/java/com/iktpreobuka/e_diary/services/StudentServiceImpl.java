@@ -1,5 +1,6 @@
 package com.iktpreobuka.e_diary.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +66,22 @@ public class StudentServiceImpl implements StudentService {
 			return true;
 		}
 		return false;
+	}
+
+	// List of all students ids for put method in class controller
+	@Override
+	public ArrayList<StudentEntity> getAllStudentsByID(ArrayList<Long> ids) {
+		ArrayList<StudentEntity> students = new ArrayList<>();
+
+		for (Long studentsId : ids) {
+			Optional<StudentEntity> indbStudent = studentRepo.findById(studentsId);
+			if (indbStudent.isPresent()) {
+				students.add(indbStudent.get());
+			} else {
+				return null;
+			}
+		}
+		return students;
 	}
 
 }

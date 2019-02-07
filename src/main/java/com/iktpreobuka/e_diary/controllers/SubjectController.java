@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iktpreobuka.e_diary.entities.ClassEntity;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.TeacherEntity;
 import com.iktpreobuka.e_diary.entities.dto.SubjectDTO;
+import com.iktpreobuka.e_diary.services.ClassService;
 import com.iktpreobuka.e_diary.services.SchoolYearService;
 import com.iktpreobuka.e_diary.services.SubjectService;
 import com.iktpreobuka.e_diary.services.TeacherService;
@@ -36,6 +38,9 @@ public class SubjectController {
 
 	@Autowired
 	private SubjectService subjectService;
+	
+	@Autowired
+	private ClassService classService;
 
 	// GET ALL
 	@RequestMapping(method = RequestMethod.GET)
@@ -97,13 +102,18 @@ public class SubjectController {
 				if (sy == null) {
 					return new ResponseEntity<>(("School year doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
-
+				//nastavnik
 				ArrayList<TeacherEntity> teachers = teacherService.getAllTeachersByID(subjectDTO.getTeachersIDs());
 				if (teachers == null) {
 					return new ResponseEntity<>(("Error has occured! Teachers not found!"), HttpStatus.BAD_REQUEST);
 				}
+				//odeljenje
+				ArrayList<ClassEntity> classes = classService.getAllClassesByID(subjectDTO.getClassesIDs());
+				if (classes == null) {
+					return new ResponseEntity<>(("Error has occured! Classes not found!"), HttpStatus.BAD_REQUEST);
+				}
 
-				SubjectEntity s = new SubjectEntity(subjectDTO, sy, teachers);
+				SubjectEntity s = new SubjectEntity(subjectDTO, sy, teachers, classes);
 				SubjectDTO newSubject = new SubjectDTO(subjectService.editSubject(s, id));
 				return new ResponseEntity<>(newSubject, HttpStatus.CREATED);
 			} catch (Exception e) {

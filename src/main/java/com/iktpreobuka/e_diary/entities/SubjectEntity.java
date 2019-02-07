@@ -66,19 +66,27 @@ public class SubjectEntity {
 		this.teachers = new ArrayList<>();
 	}
 
-	public SubjectEntity(SubjectDTO subject, SchoolYearEntity sy, ArrayList<TeacherEntity> teachers) {
+	public SubjectEntity(SubjectDTO subject, SchoolYearEntity sy, ArrayList<TeacherEntity> teachers, ArrayList<ClassEntity> clas) {
 		super();
-//		this.version = 1;
-//		this.code = UUID.randomUUID().toString();
 		this.name = subject.getName();
 		this.fond = subject.getFond();
-		this.classes = new ArrayList<>();
+		this.classes = clas;
 		this.schoolYear = sy;
 		this.marks = new ArrayList<>();
 		this.teachers = teachers;
 	}
 	
-	
+	public void updateSubject(SubjectEntity s) {
+		setFond(s.getFond());
+		setMarks(s.getMarks());
+		setCode(s.getCode());
+		setName(s.getName());
+		setClasses(s.getClasses());
+		setSchoolYear(s.getSchoolYear());
+		setTeachers(s.getTeachers());
+		setVersion(s.getVersion());
+		
+	}
 	
 
 	@Id
@@ -172,16 +180,6 @@ public class SubjectEntity {
 		this.fond = fond;
 	}
 	
-	public void updateSubject(SubjectEntity s) {
-		setFond(s.getFond());
-		setMarks(s.getMarks());
-		setCode(s.getCode());
-		setName(s.getName());
-		setClasses(s.getClasses());
-		setSchoolYear(s.getSchoolYear());
-		setTeachers(s.getTeachers());
-		setVersion(s.getVersion());
-		
-	}
+
 
 }

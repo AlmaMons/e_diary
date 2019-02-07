@@ -19,5 +19,6 @@ public interface SubjectService {
 	public boolean removeSubject(Long id);
 	
 	public ArrayList<SubjectEntity> getAllSubjectsByID(ArrayList<Long> ids);
+	
 
 }

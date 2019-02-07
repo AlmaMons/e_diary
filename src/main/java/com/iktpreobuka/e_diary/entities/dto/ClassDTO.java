@@ -25,8 +25,9 @@ public class ClassDTO {
 	@Max(value = 4, message = "Department must be max {max}!")
 	private Integer department;
 
-	// da li treba not null
+	
 	private ArrayList<Long> studentsIDs;
+	@NotNull(message = "School year must be provided!")
 	private Long schoolYearID;
 	private ArrayList<Long> subjectsIDs;
 
