@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.iktpreobuka.e_diary.entities.dto.UserDTO;
 import com.iktpreobuka.e_diary.enumerations.ERole;
 
 @Entity
@@ -26,13 +27,29 @@ public class UserEntity {
 		super();
 	}
 
-	public UserEntity(Long id, String username, String password, PersonEntity person, ERole role) {
+	public UserEntity(Long id ,String username, String password, PersonEntity person, ERole role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.person = person;
 		this.role = role;
+	}
+	
+	public UserEntity(UserDTO u, PersonEntity p) {
+		super();
+		this.id = u.getId();
+		this.username = u.getUsername();
+		this.password = u.getPassword();
+		this.person = p;
+		this.role = u.getRole();
+	}
+	
+	public void updateUser (UserEntity u) {
+		setUsername(u.getUsername());
+		setPassword(u.getPassword());
+		setPerson(u.getPerson());
+		setRole(u.getRole());
 	}
 
 	@Id
@@ -42,12 +59,11 @@ public class UserEntity {
 		return id;
 	}
 
-	@Column(name = "username")
+	@Column(name = "username", unique = true)
 	public String getUsername() {
 		return username;
 	}
 
-	// DTO
 	@JsonIgnore
 	@Column(name = "password")
 	public String getPassword() {
@@ -64,12 +80,10 @@ public class UserEntity {
 	public PersonEntity getPerson() {
 		return person;
 	}
-	
+
 	public void setRole(ERole role) {
 		this.role = role;
 	}
-
-	
 
 	public void setPerson(PersonEntity person) {
 		this.person = person;
@@ -86,5 +100,8 @@ public class UserEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	
+	
 
 }

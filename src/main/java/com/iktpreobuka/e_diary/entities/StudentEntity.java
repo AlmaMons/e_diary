@@ -43,7 +43,7 @@ public class StudentEntity extends PersonEntity {
 				studentDTO.getPhoneNumber(), studentDTO.getJmbg(), studentDTO.getEmail(), studentDTO.getBirthDate(), new ArrayList<>());
 		this.parent = p;
 		this.marks = new ArrayList<>();
-		//ssthis.clas = new ArrayList<>();
+		//this.clas = new ArrayList<>();
 	}
 	
 	public void updateStudent (StudentEntity s) {
