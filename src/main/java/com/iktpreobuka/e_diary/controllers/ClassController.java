@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.ClassEntity;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.StudentEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.dto.ClassDTO;
+import com.iktpreobuka.e_diary.security.Views;
 import com.iktpreobuka.e_diary.services.ClassService;
 import com.iktpreobuka.e_diary.services.SchoolYearService;
 import com.iktpreobuka.e_diary.services.StudentService;
@@ -42,9 +44,36 @@ public class ClassController {
 	@Autowired
 	private StudentService studentService;
 
-	// GET ALL
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<ClassDTO>> getAllClasses() {
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<ClassDTO>> getAllClassesForPublic() {
+		List<ClassDTO> classDto = new ArrayList<>();
+		List<ClassEntity> clas = classService.getAllClasses();
+
+		for (ClassEntity c : clas) {
+			classDto.add(new ClassDTO(c));
+		}
+		return new ResponseEntity<>(classDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR PRIVATE
+	@RequestMapping(method = RequestMethod.GET, value = "/private")
+	@JsonView(Views.Private.class)
+	public ResponseEntity<List<ClassDTO>> getAllClassesForPrivate() {
+		List<ClassDTO> classDto = new ArrayList<>();
+		List<ClassEntity> clas = classService.getAllClasses();
+
+		for (ClassEntity c : clas) {
+			classDto.add(new ClassDTO(c));
+		}
+		return new ResponseEntity<>(classDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR ADMIN
+	@RequestMapping(method = RequestMethod.GET, value = "/admin")
+	@JsonView(Views.Admin.class)
+	public ResponseEntity<List<ClassDTO>> getAllClassesForAdmin() {
 		List<ClassDTO> classDto = new ArrayList<>();
 		List<ClassEntity> clas = classService.getAllClasses();
 

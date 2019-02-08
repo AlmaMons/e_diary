@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.ParentEntity;
 import com.iktpreobuka.e_diary.entities.StudentEntity;
 import com.iktpreobuka.e_diary.entities.dto.StudentDTO;
+import com.iktpreobuka.e_diary.security.Views;
 import com.iktpreobuka.e_diary.services.ParentService;
 import com.iktpreobuka.e_diary.services.StudentService;
 import com.iktpreobuka.e_diary.util.RESTError;
@@ -32,16 +34,42 @@ public class StudentController {
 	@Autowired
 	private ParentService parentService;
 
-	// GET
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<StudentDTO>> getAllStudents() {
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<StudentDTO>> getAllStudentsForPublic() {
 		List<StudentDTO> studentsDto = new ArrayList<>();
 		List<StudentEntity> students = studentService.getAllStudents();
 
 		for (StudentEntity s : students) {
 			studentsDto.add(new StudentDTO(s));
 		}
+		return new ResponseEntity<>(studentsDto, HttpStatus.OK);
+	}
 
+	// GET ALL FOR PRIVATE
+	@RequestMapping(method = RequestMethod.GET, value = "/private")
+	@JsonView(Views.Private.class)
+	public ResponseEntity<List<StudentDTO>> getAllStudentsForPrivate() {
+		List<StudentDTO> studentsDto = new ArrayList<>();
+		List<StudentEntity> students = studentService.getAllStudents();
+
+		for (StudentEntity s : students) {
+			studentsDto.add(new StudentDTO(s));
+		}
+		return new ResponseEntity<>(studentsDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR ADMIN
+	@RequestMapping(method = RequestMethod.GET, value = "/admin")
+	@JsonView(Views.Admin.class)
+	public ResponseEntity<List<StudentDTO>> getAllStudentsForAdmin() {
+		List<StudentDTO> studentsDto = new ArrayList<>();
+		List<StudentEntity> students = studentService.getAllStudents();
+
+		for (StudentEntity s : students) {
+			studentsDto.add(new StudentDTO(s));
+		}
 		return new ResponseEntity<>(studentsDto, HttpStatus.OK);
 	}
 
@@ -80,7 +108,8 @@ public class StudentController {
 
 	// PUT
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-	public ResponseEntity<?> updateItem(@Valid @RequestBody StudentDTO studentDTO, BindingResult result, @PathVariable("id") Long id) {
+	public ResponseEntity<?> updateItem(@Valid @RequestBody StudentDTO studentDTO, BindingResult result,
+			@PathVariable("id") Long id) {
 		if (result.hasErrors()) {
 			return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
 		} else {
@@ -103,14 +132,15 @@ public class StudentController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
 		try {
-			if(studentService.removeStudent(id))
-				{return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);}
-			else {
+			if (studentService.removeStudent(id)) {
+				return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);
+			} else {
 				return new ResponseEntity<RESTError>(new RESTError("Student not found!"), HttpStatus.NOT_FOUND);
 			}
-			
+
 		} catch (Exception e) {
-			return new ResponseEntity<RESTError>(new RESTError("Can't delete that student"), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<RESTError>(new RESTError("Can't delete that student"),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

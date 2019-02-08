@@ -15,35 +15,63 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.dto.SchoolYearDTO;
+import com.iktpreobuka.e_diary.security.Views;
 import com.iktpreobuka.e_diary.services.SchoolYearService;
 import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
-@RequestMapping ( path = "/api/v1/years")
+@RequestMapping(path = "/api/v1/years")
 public class SchoolYearController {
-	
+
 	@Autowired
 	private SchoolYearService yearService;
-	
-	//GET
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<SchoolYearDTO>> getAllYear() {
-		List<SchoolYearDTO> yearDto = new ArrayList<>(); 
-		List<SchoolYearEntity> year =  yearService.getAllYear();
-			
-			for (SchoolYearEntity y : year) {
-				yearDto.add(new SchoolYearDTO(y));
-			}
 
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<SchoolYearDTO>> getAllYearForPublic() {
+		List<SchoolYearDTO> yearDto = new ArrayList<>();
+		List<SchoolYearEntity> year = yearService.getAllYear();
+
+		for (SchoolYearEntity y : year) {
+			yearDto.add(new SchoolYearDTO(y));
+		}
 		return new ResponseEntity<>(yearDto, HttpStatus.OK);
 	}
-	
+
+	// GET ALL FOR PRIVATE
+	@RequestMapping(method = RequestMethod.GET, value = "/private")
+	@JsonView(Views.Private.class)
+	public ResponseEntity<List<SchoolYearDTO>> getAllYearForPrivate() {
+		List<SchoolYearDTO> yearDto = new ArrayList<>();
+		List<SchoolYearEntity> year = yearService.getAllYear();
+
+		for (SchoolYearEntity y : year) {
+			yearDto.add(new SchoolYearDTO(y));
+		}
+		return new ResponseEntity<>(yearDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR ADMIN
+	@RequestMapping(method = RequestMethod.GET, value = "/admin")
+	@JsonView(Views.Admin.class)
+	public ResponseEntity<List<SchoolYearDTO>> getAllYearForAdmin() {
+		List<SchoolYearDTO> yearDto = new ArrayList<>();
+		List<SchoolYearEntity> year = yearService.getAllYear();
+
+		for (SchoolYearEntity y : year) {
+			yearDto.add(new SchoolYearDTO(y));
+		}
+		return new ResponseEntity<>(yearDto, HttpStatus.OK);
+	}
+
 	// GET BY ID
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getYearById(@PathVariable Long id) {
-		
+
 		try {
 			SchoolYearEntity sy = yearService.findYearById(id);
 			SchoolYearDTO dto = new SchoolYearDTO(sy);
@@ -51,10 +79,10 @@ public class SchoolYearController {
 		} catch (Exception e) {
 			return new ResponseEntity<RESTError>(new RESTError("Year not found!"), HttpStatus.NOT_FOUND);
 		}
-		
+
 	}
-	
-	//POST, postavlja i duplikate
+
+	// POST, postavlja i duplikate
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveYear(@Valid @RequestBody SchoolYearDTO yearDto, BindingResult result) {
 
@@ -70,10 +98,11 @@ public class SchoolYearController {
 			}
 		}
 	}
-	
-	//PUT
+
+	// PUT
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-	public ResponseEntity<?> updateItem(@Valid @RequestBody SchoolYearDTO yearDTO, BindingResult result, @PathVariable("id") Long id) {
+	public ResponseEntity<?> updateItem(@Valid @RequestBody SchoolYearDTO yearDTO, BindingResult result,
+			@PathVariable("id") Long id) {
 
 		if (result.hasErrors()) {
 			return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
@@ -88,21 +117,21 @@ public class SchoolYearController {
 		}
 	}
 
-	
-	//DELETE
+	// DELETE
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteYear(@PathVariable Long id) {
 		try {
-			if(yearService.removeParent(id))
-				{return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);}
-			else {
+			if (yearService.removeParent(id)) {
+				return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);
+			} else {
 				return new ResponseEntity<RESTError>(new RESTError("School year not found!"), HttpStatus.NOT_FOUND);
 			}
-			
+
 		} catch (Exception e) {
-			return new ResponseEntity<RESTError>(new RESTError("Can't delete that parent"), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<RESTError>(new RESTError("Can't delete that parent"),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
 
 }

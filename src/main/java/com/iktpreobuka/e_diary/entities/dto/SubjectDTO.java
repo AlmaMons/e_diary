@@ -8,29 +8,40 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.ClassEntity;
 import com.iktpreobuka.e_diary.entities.MarkEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.TeacherEntity;
+import com.iktpreobuka.e_diary.security.Views;
 
 public class SubjectDTO {
-
+	
+	@JsonView (Views.Public.class)
 	private Long id;
 
+	@JsonView (Views.Public.class)
 	@NotNull(message = "Name must be provided!")
 	@Size(min = 2, max = 20, message = "Name must be between {min} and {max} characters long!")
 	private String name;
 
+	@JsonView (Views.Private.class)
 	@NotNull(message = "Fond must be provided!")
 	@Min(value = 20, message = "Fond must have min {min} hours!")
 	@Max(value = 31, message = "Fond must have max {max} hours!")
 	private Integer fond;
 
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> classesIDs;
+	
+	@JsonView (Views.Private.class)
 	@NotNull(message = "School year must be provided!")
 	private Long schoolYearID;
+	
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> marksIDs;
-//	@NotNull(message = "Teachers must be provided!")
+
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> teachersIDs;
 
 	public SubjectDTO(Long id, String name, Integer fond, ArrayList<Long> classesIDs, Long schoolYearID,

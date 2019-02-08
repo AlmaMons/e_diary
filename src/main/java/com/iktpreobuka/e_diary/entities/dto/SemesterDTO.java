@@ -9,28 +9,37 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.MarkEntity;
 import com.iktpreobuka.e_diary.entities.SemesterEntity;
+import com.iktpreobuka.e_diary.security.Views;
 
 
 public class SemesterDTO {
 	
+	@JsonView (Views.Public.class)
 	private Long id;
 	
+	@JsonView (Views.Public.class)
 	@NotNull(message="Order number must be provided!")
 	@Range (min = 1, max = 2, message = "Order number must be {min} or {max}!")
 	private Integer orderNumber;
 	
+	@JsonView (Views.Public.class)
 	@NotNull (message="Date from must be provided!")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Europe/Belgrade")
 	private Date dateFrom;
 	
+	@JsonView (Views.Public.class)
 	@NotNull (message="Date to must be provided!")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Europe/Belgrade")
 	private Date dateTo;
 	
+	@JsonView (Views.Private.class)
 	@NotNull (message="You have to add a school year!")
 	private Long schoolYearID;
+	
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> marksIDs;
 	
 	public SemesterDTO(Long id, Integer orderNumber, Date dateFrom, Date dateTo, Long schoolYearID, ArrayList<Long> marksIDs) {

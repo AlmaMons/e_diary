@@ -7,34 +7,43 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.MarkEntity;
 import com.iktpreobuka.e_diary.enumerations.EMarkType;
+import com.iktpreobuka.e_diary.security.Views;
 
 public class MarkDTO {
 
+	@JsonView (Views.Public.class)
 	private Long id;
 
+	@JsonView (Views.Public.class)
 	@NotNull(message = "Mark must be provided!")
 	@Min(value = 1, message = "Mark must be min {min}!")
 	@Max(value = 5, message = "Mark must be max {max}!")
 	private Integer mark;
 
-	
+	@JsonView (Views.Public.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Belgrade")
 	private Date date;
-
+	
+	@JsonView (Views.Private.class)
 	@NotNull(message = "Mark type must be provided!")
 	private EMarkType markType;
 
+	@JsonView (Views.Private.class)
 	@NotNull(message = "Student must be provided!")
 	private Long studentID;
-
+	
+	@JsonView (Views.Private.class)
 	@NotNull(message = "Teacher must be provided!")
 	private Long teacherID;
 
+	@JsonView (Views.Private.class)
 	@NotNull(message = "Subject must be provided!")
 	private Long subjectID;
 
+	@JsonView (Views.Private.class)
 	@NotNull(message = "Semester must be provided!")
 	private Long semesterID;
 

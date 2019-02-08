@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.ClassEntity;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.TeacherEntity;
 import com.iktpreobuka.e_diary.entities.dto.SubjectDTO;
+import com.iktpreobuka.e_diary.security.Views;
 import com.iktpreobuka.e_diary.services.ClassService;
 import com.iktpreobuka.e_diary.services.SchoolYearService;
 import com.iktpreobuka.e_diary.services.SubjectService;
@@ -38,13 +40,40 @@ public class SubjectController {
 
 	@Autowired
 	private SubjectService subjectService;
-	
+
 	@Autowired
 	private ClassService classService;
 
-	// GET ALL
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<SubjectDTO>> getAllSubjects() {
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<SubjectDTO>> getAllSubjectsForPublic() {
+		List<SubjectDTO> subjectsDto = new ArrayList<>();
+		List<SubjectEntity> subjects = subjectService.getAllSubjects();
+
+		for (SubjectEntity s : subjects) {
+			subjectsDto.add(new SubjectDTO(s));
+		}
+		return new ResponseEntity<>(subjectsDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR PRIVATE
+	@RequestMapping(method = RequestMethod.GET, value = "/private")
+	@JsonView(Views.Private.class)
+	public ResponseEntity<List<SubjectDTO>> getAllSubjectsForPrivate() {
+		List<SubjectDTO> subjectsDto = new ArrayList<>();
+		List<SubjectEntity> subjects = subjectService.getAllSubjects();
+
+		for (SubjectEntity s : subjects) {
+			subjectsDto.add(new SubjectDTO(s));
+		}
+		return new ResponseEntity<>(subjectsDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR ADMIN
+	@RequestMapping(method = RequestMethod.GET, value = "/admin")
+	@JsonView(Views.Admin.class)
+	public ResponseEntity<List<SubjectDTO>> getAllSubjectsForAdmin() {
 		List<SubjectDTO> subjectsDto = new ArrayList<>();
 		List<SubjectEntity> subjects = subjectService.getAllSubjects();
 
@@ -102,12 +131,12 @@ public class SubjectController {
 				if (sy == null) {
 					return new ResponseEntity<>(("School year doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
-				//nastavnik
+				// nastavnik
 				ArrayList<TeacherEntity> teachers = teacherService.getAllTeachersByID(subjectDTO.getTeachersIDs());
 				if (teachers == null) {
 					return new ResponseEntity<>(("Error has occured! Teachers not found!"), HttpStatus.BAD_REQUEST);
 				}
-				//odeljenje
+				// odeljenje
 				ArrayList<ClassEntity> classes = classService.getAllClassesByID(subjectDTO.getClassesIDs());
 				if (classes == null) {
 					return new ResponseEntity<>(("Error has occured! Classes not found!"), HttpStatus.BAD_REQUEST);
@@ -121,18 +150,19 @@ public class SubjectController {
 			}
 		}
 	}
-	
+
 	// DELETE
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteSubject(@PathVariable Long id) {
 		try {
-			if(subjectService.removeSubject(id))
-				{return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);}
-			else {
+			if (subjectService.removeSubject(id)) {
+				return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);
+			} else {
 				return new ResponseEntity<RESTError>(new RESTError("Subject not found!"), HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception e) {
-			return new ResponseEntity<RESTError>(new RESTError("Can't delete that subject"), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<RESTError>(new RESTError("Can't delete that subject"),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

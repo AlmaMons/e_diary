@@ -6,21 +6,30 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.ClassEntity;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.SemesterEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
+import com.iktpreobuka.e_diary.security.Views;
 
 public class SchoolYearDTO {
 	
+	@JsonView (Views.Public.class)
 	private Long id;
 
+	@JsonView (Views.Public.class)
 	@NotNull(message = "Year must be provided!")
 	@Pattern(regexp = "^(20[0-9][0-9])/(20[0-9][0-9])$", message = "School year must be in format 20yy/20yy!")
 	private String year;
 
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> classIDs;
+	
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> semestersIDs;
+	
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> subjectsIDs;
 	
 	

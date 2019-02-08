@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.TeacherEntity;
 import com.iktpreobuka.e_diary.entities.dto.TeacherDTO;
+import com.iktpreobuka.e_diary.security.Views;
 import com.iktpreobuka.e_diary.services.SubjectService;
 import com.iktpreobuka.e_diary.services.TeacherService;
 import com.iktpreobuka.e_diary.util.RESTError;
@@ -32,9 +34,36 @@ public class TeacherController {
 	@Autowired
 	private SubjectService subjectService;
 
-	// GET ALL
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<TeacherDTO>> getAllTeachers() {
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<TeacherDTO>> getAllTeachersForPublic() {
+		List<TeacherDTO> teacherDto = new ArrayList<>();
+		List<TeacherEntity> teachers = teacherService.getAllTeachers();
+
+		for (TeacherEntity t : teachers) {
+			teacherDto.add(new TeacherDTO(t));
+		}
+		return new ResponseEntity<>(teacherDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR PRIVATE
+	@RequestMapping(method = RequestMethod.GET, value = "/private")
+	@JsonView(Views.Private.class)
+	public ResponseEntity<List<TeacherDTO>> getAllTeachersForPrivate() {
+		List<TeacherDTO> teacherDto = new ArrayList<>();
+		List<TeacherEntity> teachers = teacherService.getAllTeachers();
+
+		for (TeacherEntity t : teachers) {
+			teacherDto.add(new TeacherDTO(t));
+		}
+		return new ResponseEntity<>(teacherDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR ADMIN
+	@RequestMapping(method = RequestMethod.GET, value = "/admin")
+	@JsonView(Views.Admin.class)
+	public ResponseEntity<List<TeacherDTO>> getAllTeachersForAdmin() {
 		List<TeacherDTO> teacherDto = new ArrayList<>();
 		List<TeacherEntity> teachers = teacherService.getAllTeachers();
 

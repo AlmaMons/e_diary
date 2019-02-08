@@ -9,48 +9,59 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.MarkEntity;
 import com.iktpreobuka.e_diary.entities.StudentEntity;
+import com.iktpreobuka.e_diary.security.Views;
 
 public class StudentDTO {
 
-	
+	@JsonView (Views.Public.class)
 	private Long id;
 	
+	@JsonView (Views.Public.class)
 	@NotNull(message="Name must be provided!")
 	@Size (min = 2, max = 20, message = "Name must be between {min} and {max} characters long!")
 	private String name;
 	
+	@JsonView (Views.Public.class)
 	@NotNull(message="Last name must be provided!")
 	@Size (min = 2, max =30, message = "Last name must be between {min} and {max} characters long!")
 	private String lastName;
 	
+	@JsonView (Views.Admin.class)
 	@NotNull(message="Address must be provided!")
 	@Size(max=50, message= "Category description can't be more than {max} characters long!")
 	private String address;
 	
+	@JsonView (Views.Admin.class)
 	@NotNull(message="Phone number must be provided!")
 	@Size (max = 20, message = "Phone number must be between {min} and {max} characters long!")
 	private String phoneNumber;
 	
+	@JsonView (Views.Admin.class)
 	@NotNull(message="JMBG must be provided!")
 	@Pattern(regexp = "^[0-9]{13}$", message = "JMBG must have 13 characters!")
 	private String jmbg;
 	
+	@JsonView (Views.Admin.class)
 	@NotNull(message = "Email must be provided!")
 	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Email is not valid!")
 	private String email;
 	
+	@JsonView (Views.Admin.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Europe/Belgrade")
 	private Date birthDate;
 	
-
+	@JsonView (Views.Private.class)
 	@NotNull(message="You have to add a parent!")
 	private Long parentID;
 	
+	@JsonView (Views.Private.class)
 	private Long classID;
-
+	
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> marksIDs;
 
 	public StudentDTO(Long id, String name, String lastName, String address, String phoneNumber, String jmbg, String email,

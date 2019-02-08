@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.MarkEntity;
 import com.iktpreobuka.e_diary.entities.SemesterEntity;
 import com.iktpreobuka.e_diary.entities.StudentEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
 import com.iktpreobuka.e_diary.entities.TeacherEntity;
 import com.iktpreobuka.e_diary.entities.dto.MarkDTO;
+import com.iktpreobuka.e_diary.security.Views;
 import com.iktpreobuka.e_diary.services.MarkService;
 import com.iktpreobuka.e_diary.services.SemesterService;
 import com.iktpreobuka.e_diary.services.StudentService;
@@ -47,9 +49,36 @@ public class MarkController {
 	@Autowired
 	private SubjectService subjectService;
 
-	// GET ALL
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<MarkDTO>> getAllMarks() {
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<MarkDTO>> getAllMarksForPublic() {
+		List<MarkDTO> marksDto = new ArrayList<>();
+		List<MarkEntity> marks = markService.getAllMarks();
+
+		for (MarkEntity m : marks) {
+			marksDto.add(new MarkDTO(m));
+		}
+		return new ResponseEntity<>(marksDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR PRIVATE
+	@RequestMapping(method = RequestMethod.GET, value = "/private")
+	@JsonView(Views.Private.class)
+	public ResponseEntity<List<MarkDTO>> getAllMarksForPrivate() {
+		List<MarkDTO> marksDto = new ArrayList<>();
+		List<MarkEntity> marks = markService.getAllMarks();
+
+		for (MarkEntity m : marks) {
+			marksDto.add(new MarkDTO(m));
+		}
+		return new ResponseEntity<>(marksDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR ADMIN
+	@RequestMapping(method = RequestMethod.GET, value = "/admin")
+	@JsonView(Views.Admin.class)
+	public ResponseEntity<List<MarkDTO>> getAllMarksForAdmin() {
 		List<MarkDTO> marksDto = new ArrayList<>();
 		List<MarkEntity> marks = markService.getAllMarks();
 
@@ -155,7 +184,7 @@ public class MarkController {
 
 	// DELETE
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-	public ResponseEntity<?> deleteMark (@PathVariable Long id) {
+	public ResponseEntity<?> deleteMark(@PathVariable Long id) {
 		try {
 			if (markService.removeMark(id)) {
 				return new ResponseEntity<RESTError>(new RESTError("Delete successfully!"), HttpStatus.OK);
@@ -163,8 +192,7 @@ public class MarkController {
 				return new ResponseEntity<RESTError>(new RESTError("Mark not found!"), HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception e) {
-			return new ResponseEntity<RESTError>(new RESTError("Error occured!"),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<RESTError>(new RESTError("Error occured!"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

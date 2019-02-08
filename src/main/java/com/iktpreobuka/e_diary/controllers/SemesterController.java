@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.SchoolYearEntity;
 import com.iktpreobuka.e_diary.entities.SemesterEntity;
 import com.iktpreobuka.e_diary.entities.dto.SemesterDTO;
+import com.iktpreobuka.e_diary.security.Views;
 import com.iktpreobuka.e_diary.services.SchoolYearService;
 import com.iktpreobuka.e_diary.services.SemesterService;
 import com.iktpreobuka.e_diary.util.RESTError;
@@ -32,9 +34,36 @@ public class SemesterController {
 	@Autowired
 	private SemesterService semesterService;
 
-	// GET ALL
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<SemesterDTO>> getAllSemesters() {
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<SemesterDTO>> getAllSemestersForPublic() {
+		List<SemesterDTO> semestersDto = new ArrayList<>();
+		List<SemesterEntity> semesters = semesterService.getAllSemesters();
+
+		for (SemesterEntity s : semesters) {
+			semestersDto.add(new SemesterDTO(s));
+		}
+		return new ResponseEntity<>(semestersDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR PRIVATE
+	@RequestMapping(method = RequestMethod.GET, value = "/private")
+	@JsonView(Views.Private.class)
+	public ResponseEntity<List<SemesterDTO>> getAllSemestersForPrivate() {
+		List<SemesterDTO> semestersDto = new ArrayList<>();
+		List<SemesterEntity> semesters = semesterService.getAllSemesters();
+
+		for (SemesterEntity s : semesters) {
+			semestersDto.add(new SemesterDTO(s));
+		}
+		return new ResponseEntity<>(semestersDto, HttpStatus.OK);
+	}
+
+	// GET ALL FOR ADMIN
+	@RequestMapping(method = RequestMethod.GET, value = "/admin")
+	@JsonView(Views.Admin.class)
+	public ResponseEntity<List<SemesterDTO>> getAllSemestersForAdmin() {
 		List<SemesterDTO> semestersDto = new ArrayList<>();
 		List<SemesterEntity> semesters = semesterService.getAllSemesters();
 
@@ -111,7 +140,8 @@ public class SemesterController {
 			}
 
 		} catch (Exception e) {
-			return new ResponseEntity<RESTError>(new RESTError("Can't delete that semester"), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<RESTError>(new RESTError("Can't delete that semester"),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

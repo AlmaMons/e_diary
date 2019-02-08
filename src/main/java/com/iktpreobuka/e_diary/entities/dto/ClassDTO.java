@@ -8,27 +8,36 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.iktpreobuka.e_diary.entities.ClassEntity;
 import com.iktpreobuka.e_diary.entities.StudentEntity;
 import com.iktpreobuka.e_diary.entities.SubjectEntity;
+import com.iktpreobuka.e_diary.security.Views;
 
 public class ClassDTO {
-
+	
+	@JsonView (Views.Public.class)
 	private Long id;
 
+	@JsonView (Views.Public.class)
 	@NotNull(message = "Class must be provided!")
 	@Size(max = 3, message = "Class must have a maximum of {max} characters!")
 	private String clas;
 
+	@JsonView (Views.Public.class)
 	@NotNull(message = "Department must be provided!")
 	@Min(value = 1, message = "Department must be min {min}!")
 	@Max(value = 4, message = "Department must be max {max}!")
 	private Integer department;
 
-	
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> studentsIDs;
+	
+	@JsonView (Views.Private.class)
 	@NotNull(message = "School year must be provided!")
 	private Long schoolYearID;
+	
+	@JsonView (Views.Private.class)
 	private ArrayList<Long> subjectsIDs;
 
 	public ClassDTO(Long id, String clas, Integer department, ArrayList<Long> studentsIDs, Long schoolYearID,

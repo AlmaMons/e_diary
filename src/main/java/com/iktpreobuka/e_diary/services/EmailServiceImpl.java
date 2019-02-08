@@ -27,7 +27,6 @@ public class EmailServiceImpl implements EmailService {
 				+ ") , koji predaje " + object.getTeacherName() + " "
 				+ object.getTeacherLastName() + "! <br><br> S' poštovanjem <br> Školska uprava</body></html>";
 
-		// System.out.println(text);
 		helper.setText(text, true);
 		emailSender.send(mail);
 
