@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ public class SchoolYearController {
 	private SchoolYearService yearService;
 
 	// GET ALL FOR PUBLIC
+	@Secured ("PARENT")
 	@RequestMapping(method = RequestMethod.GET, value = "/public")
 	@JsonView(Views.Public.class)
 	public ResponseEntity<List<SchoolYearDTO>> getAllYearForPublic() {
@@ -43,6 +45,7 @@ public class SchoolYearController {
 	}
 
 	// GET ALL FOR PRIVATE
+	@Secured ({"ADMIN", "TEACHER", "STUDENT"})
 	@RequestMapping(method = RequestMethod.GET, value = "/private")
 	@JsonView(Views.Private.class)
 	public ResponseEntity<List<SchoolYearDTO>> getAllYearForPrivate() {
@@ -55,20 +58,8 @@ public class SchoolYearController {
 		return new ResponseEntity<>(yearDto, HttpStatus.OK);
 	}
 
-	// GET ALL FOR ADMIN
-	@RequestMapping(method = RequestMethod.GET, value = "/admin")
-	@JsonView(Views.Admin.class)
-	public ResponseEntity<List<SchoolYearDTO>> getAllYearForAdmin() {
-		List<SchoolYearDTO> yearDto = new ArrayList<>();
-		List<SchoolYearEntity> year = yearService.getAllYear();
-
-		for (SchoolYearEntity y : year) {
-			yearDto.add(new SchoolYearDTO(y));
-		}
-		return new ResponseEntity<>(yearDto, HttpStatus.OK);
-	}
-
 	// GET BY ID
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getYearById(@PathVariable Long id) {
 
@@ -82,7 +73,8 @@ public class SchoolYearController {
 
 	}
 
-	// POST, postavlja i duplikate
+	// POST
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveYear(@Valid @RequestBody SchoolYearDTO yearDto, BindingResult result) {
 
@@ -100,6 +92,7 @@ public class SchoolYearController {
 	}
 
 	// PUT
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> updateItem(@Valid @RequestBody SchoolYearDTO yearDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -118,6 +111,7 @@ public class SchoolYearController {
 	}
 
 	// DELETE
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteYear(@PathVariable Long id) {
 		try {

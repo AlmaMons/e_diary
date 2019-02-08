@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ public class ParentController {
 	private ParentService parentService;
 
 	// GET ALL FOR PUBLIC
+	@Secured ({"TEACHER", "STUDENT"})
 	@RequestMapping(method = RequestMethod.GET, value = "/public")
 	@JsonView(Views.Public.class)
 	public ResponseEntity<List<ParentDTO>> getAllParentsForPublic() {
@@ -43,6 +45,7 @@ public class ParentController {
 	}
 
 	// GET ALL FOR PRIVATE
+	@Secured ("PARENT")
 	@RequestMapping(method = RequestMethod.GET, value = "/private")
 	@JsonView(Views.Private.class)
 	public ResponseEntity<List<ParentDTO>> getAllParentsForPrivate() {
@@ -56,6 +59,7 @@ public class ParentController {
 	}
 
 	// GET ALL FOR ADMIN
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.GET, value = "/admin")
 	@JsonView(Views.Admin.class)
 	public ResponseEntity<List<ParentDTO>> getAllParentsForAdmin() {
@@ -69,6 +73,7 @@ public class ParentController {
 	}
 
 	// GET BY ID
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getParentById(@PathVariable Long id) {
 
@@ -82,6 +87,7 @@ public class ParentController {
 	}
 
 	// POST
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveParent(@Valid @RequestBody ParentDTO parentDto, BindingResult result) {
 
@@ -100,6 +106,7 @@ public class ParentController {
 	}
 
 	// PUT
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> updateItem(@Valid @RequestBody ParentDTO parentDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -119,6 +126,7 @@ public class ParentController {
 	}
 
 	// DELETE
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteParent(@PathVariable Long id) {
 		try {

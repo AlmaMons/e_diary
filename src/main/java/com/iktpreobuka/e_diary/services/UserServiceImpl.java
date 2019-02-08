@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	// POST
 	@Override
 	public UserEntity saveUser(UserEntity user) {
-
+		
 		if ((user.getRole() == ERole.STUDENT) && user.getPerson() instanceof StudentEntity) {
 			return userRepo.save(user);
 		} else if ((user.getRole() == ERole.TEACHER || user.getRole() == ERole.PARENT)

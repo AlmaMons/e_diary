@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ public class SemesterController {
 	private SemesterService semesterService;
 
 	// GET ALL FOR PUBLIC
+	@Secured ({"PARENT", "STUDENT"})
 	@RequestMapping(method = RequestMethod.GET, value = "/public")
 	@JsonView(Views.Public.class)
 	public ResponseEntity<List<SemesterDTO>> getAllSemestersForPublic() {
@@ -48,6 +50,7 @@ public class SemesterController {
 	}
 
 	// GET ALL FOR PRIVATE
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.GET, value = "/private")
 	@JsonView(Views.Private.class)
 	public ResponseEntity<List<SemesterDTO>> getAllSemestersForPrivate() {
@@ -60,20 +63,9 @@ public class SemesterController {
 		return new ResponseEntity<>(semestersDto, HttpStatus.OK);
 	}
 
-	// GET ALL FOR ADMIN
-	@RequestMapping(method = RequestMethod.GET, value = "/admin")
-	@JsonView(Views.Admin.class)
-	public ResponseEntity<List<SemesterDTO>> getAllSemestersForAdmin() {
-		List<SemesterDTO> semestersDto = new ArrayList<>();
-		List<SemesterEntity> semesters = semesterService.getAllSemesters();
-
-		for (SemesterEntity s : semesters) {
-			semestersDto.add(new SemesterDTO(s));
-		}
-		return new ResponseEntity<>(semestersDto, HttpStatus.OK);
-	}
 
 	// GET BY ID
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getSemesterById(@PathVariable Long id) {
 
@@ -87,6 +79,7 @@ public class SemesterController {
 	}
 
 	// POST
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveSemester(@Valid @RequestBody SemesterDTO semesterDTO, BindingResult result) {
 
@@ -108,6 +101,7 @@ public class SemesterController {
 	}
 
 	// PUT
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> updateItem(@Valid @RequestBody SemesterDTO semesterDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -130,6 +124,7 @@ public class SemesterController {
 	}
 
 	// DELETE
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteSemester(@PathVariable Long id) {
 		try {

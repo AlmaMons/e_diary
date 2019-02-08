@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,20 +35,21 @@ public class StudentController {
 	@Autowired
 	private ParentService parentService;
 
-	// GET ALL FOR PUBLIC
-	@RequestMapping(method = RequestMethod.GET, value = "/public")
-	@JsonView(Views.Public.class)
-	public ResponseEntity<List<StudentDTO>> getAllStudentsForPublic() {
-		List<StudentDTO> studentsDto = new ArrayList<>();
-		List<StudentEntity> students = studentService.getAllStudents();
-
-		for (StudentEntity s : students) {
-			studentsDto.add(new StudentDTO(s));
-		}
-		return new ResponseEntity<>(studentsDto, HttpStatus.OK);
-	}
+//	// GET ALL FOR PUBLIC
+//	@RequestMapping(method = RequestMethod.GET, value = "/public")
+//	@JsonView(Views.Public.class)
+//	public ResponseEntity<List<StudentDTO>> getAllStudentsForPublic() {
+//		List<StudentDTO> studentsDto = new ArrayList<>();
+//		List<StudentEntity> students = studentService.getAllStudents();
+//
+//		for (StudentEntity s : students) {
+//			studentsDto.add(new StudentDTO(s));
+//		}
+//		return new ResponseEntity<>(studentsDto, HttpStatus.OK);
+//	}
 
 	// GET ALL FOR PRIVATE
+	@Secured ({"TEACHER", "STUDENT", "PARENT"})
 	@RequestMapping(method = RequestMethod.GET, value = "/private")
 	@JsonView(Views.Private.class)
 	public ResponseEntity<List<StudentDTO>> getAllStudentsForPrivate() {
@@ -61,6 +63,7 @@ public class StudentController {
 	}
 
 	// GET ALL FOR ADMIN
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.GET, value = "/admin")
 	@JsonView(Views.Admin.class)
 	public ResponseEntity<List<StudentDTO>> getAllStudentsForAdmin() {
@@ -74,6 +77,7 @@ public class StudentController {
 	}
 
 	// GET BY ID
+	@Secured ({"ADMIN", "TEACHER"})
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getStudentById(@PathVariable Long id) {
 		try {
@@ -86,6 +90,7 @@ public class StudentController {
 	}
 
 	// POST
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveStudent(@Valid @RequestBody StudentDTO studentDTO, BindingResult result) {
 
@@ -107,6 +112,7 @@ public class StudentController {
 	}
 
 	// PUT
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> updateItem(@Valid @RequestBody StudentDTO studentDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -129,6 +135,7 @@ public class StudentController {
 	}
 
 	// DELETE
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
 		try {

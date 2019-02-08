@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ public class TeacherController {
 	private SubjectService subjectService;
 
 	// GET ALL FOR PUBLIC
+	@Secured ({"PARENT", "STUDENT"})
 	@RequestMapping(method = RequestMethod.GET, value = "/public")
 	@JsonView(Views.Public.class)
 	public ResponseEntity<List<TeacherDTO>> getAllTeachersForPublic() {
@@ -48,6 +50,7 @@ public class TeacherController {
 	}
 
 	// GET ALL FOR PRIVATE
+	@Secured ("TEACHER")
 	@RequestMapping(method = RequestMethod.GET, value = "/private")
 	@JsonView(Views.Private.class)
 	public ResponseEntity<List<TeacherDTO>> getAllTeachersForPrivate() {
@@ -61,6 +64,7 @@ public class TeacherController {
 	}
 
 	// GET ALL FOR ADMIN
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.GET, value = "/admin")
 	@JsonView(Views.Admin.class)
 	public ResponseEntity<List<TeacherDTO>> getAllTeachersForAdmin() {
@@ -74,6 +78,7 @@ public class TeacherController {
 	}
 
 	// GET BY ID
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getTeacherById(@PathVariable Long id) {
 
@@ -87,6 +92,7 @@ public class TeacherController {
 	}
 
 	// POST
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveTeacher(@Valid @RequestBody TeacherDTO teacherDTO, BindingResult result) {
 
@@ -104,6 +110,7 @@ public class TeacherController {
 	}
 
 	// PUT
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> updateItem(@Valid @RequestBody TeacherDTO teacherDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -127,6 +134,7 @@ public class TeacherController {
 	}
 
 	// DELETE
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteTeacher(@PathVariable Long id) {
 		try {

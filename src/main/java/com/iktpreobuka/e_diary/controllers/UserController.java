@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
 @RequestMapping(path = "/api/v1/users")
+@Secured("ADMIN")
 public class UserController {
 
 	@Autowired
@@ -46,6 +48,7 @@ public class UserController {
 	private TeacherService teacherService;
 
 	// GET ALL ADMIN
+	
 	@RequestMapping(method = RequestMethod.GET)
 	@JsonView (Views.Admin.class)
 	public ResponseEntity<List<UserDTO>> getAllUsers() {

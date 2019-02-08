@@ -18,6 +18,7 @@ public class UserDTO {
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Email is not valid!")
 	private String username;
 	
+	
 	@JsonView (Views.Admin.class)
 	@NotNull(message = "Password must be provided!")
 	private String password;

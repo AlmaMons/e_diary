@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,20 +50,21 @@ public class MarkController {
 	@Autowired
 	private SubjectService subjectService;
 
-	// GET ALL FOR PUBLIC
-	@RequestMapping(method = RequestMethod.GET, value = "/public")
-	@JsonView(Views.Public.class)
-	public ResponseEntity<List<MarkDTO>> getAllMarksForPublic() {
-		List<MarkDTO> marksDto = new ArrayList<>();
-		List<MarkEntity> marks = markService.getAllMarks();
-
-		for (MarkEntity m : marks) {
-			marksDto.add(new MarkDTO(m));
-		}
-		return new ResponseEntity<>(marksDto, HttpStatus.OK);
-	}
+//	// GET ALL FOR PUBLIC
+//	@RequestMapping(method = RequestMethod.GET, value = "/public")
+//	@JsonView(Views.Public.class)
+//	public ResponseEntity<List<MarkDTO>> getAllMarksForPublic() {
+//		List<MarkDTO> marksDto = new ArrayList<>();
+//		List<MarkEntity> marks = markService.getAllMarks();
+//
+//		for (MarkEntity m : marks) {
+//			marksDto.add(new MarkDTO(m));
+//		}
+//		return new ResponseEntity<>(marksDto, HttpStatus.OK);
+//	}
 
 	// GET ALL FOR PRIVATE
+	@Secured ({"TEACHER", "STUDENT", "PARENT"})
 	@RequestMapping(method = RequestMethod.GET, value = "/private")
 	@JsonView(Views.Private.class)
 	public ResponseEntity<List<MarkDTO>> getAllMarksForPrivate() {
@@ -76,6 +78,7 @@ public class MarkController {
 	}
 
 	// GET ALL FOR ADMIN
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.GET, value = "/admin")
 	@JsonView(Views.Admin.class)
 	public ResponseEntity<List<MarkDTO>> getAllMarksForAdmin() {
@@ -89,6 +92,7 @@ public class MarkController {
 	}
 
 	// GET BY ID
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getMarkById(@PathVariable Long id) {
 
@@ -102,6 +106,7 @@ public class MarkController {
 	}
 
 	// POST
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveMark(@Valid @RequestBody MarkDTO markDTO, BindingResult result) {
 
@@ -109,30 +114,26 @@ public class MarkController {
 			return new ResponseEntity<>(RESTError.createErrorMessage(result), HttpStatus.BAD_REQUEST);
 		} else {
 			try {
-				// nastavnik
+				
 				TeacherEntity teacher = teacherService.findTeacherById(markDTO.getTeacherID());
 				if (teacher == null) {
 					return new ResponseEntity<>(("Teacher doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
-				// predmet
+				
 				SubjectEntity subject = subjectService.findSubjectById(markDTO.getSubjectID());
 				if (subject == null) {
 					return new ResponseEntity<>(("Subject doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
-				// ucenik
+				
 				StudentEntity student = studentService.findStudentById(markDTO.getStudentID());
 				if (student == null) {
 					return new ResponseEntity<>(("Student doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
 
-				// polugodiste
 				SemesterEntity semester = semesterService.findSemesterById(markDTO.getSemesterID());
 				if (semester == null) {
 					return new ResponseEntity<>(("Semester doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
-
-				// kako ga ograniciti da ne unese 10 puta jednu istu ocenu
-				// proveriti da li je isti dan, isti ucenik, isti tip ocene
 
 				MarkEntity mark = new MarkEntity(markDTO, student, teacher, subject, semester);
 				MarkDTO newMark = new MarkDTO(markService.saveMark(mark));
@@ -144,6 +145,7 @@ public class MarkController {
 	}
 
 	// PUT
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> editMark(@Valid @RequestBody MarkDTO markDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -183,6 +185,7 @@ public class MarkController {
 	}
 
 	// DELETE
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteMark(@PathVariable Long id) {
 		try {

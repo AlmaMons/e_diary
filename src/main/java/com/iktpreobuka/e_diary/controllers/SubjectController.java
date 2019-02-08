@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +46,7 @@ public class SubjectController {
 	private ClassService classService;
 
 	// GET ALL FOR PUBLIC
+	@Secured ({"PARENT", "STUDENT"})
 	@RequestMapping(method = RequestMethod.GET, value = "/public")
 	@JsonView(Views.Public.class)
 	public ResponseEntity<List<SubjectDTO>> getAllSubjectsForPublic() {
@@ -58,6 +60,7 @@ public class SubjectController {
 	}
 
 	// GET ALL FOR PRIVATE
+	@Secured ({"TEACHER", "ADMIN" })
 	@RequestMapping(method = RequestMethod.GET, value = "/private")
 	@JsonView(Views.Private.class)
 	public ResponseEntity<List<SubjectDTO>> getAllSubjectsForPrivate() {
@@ -70,20 +73,8 @@ public class SubjectController {
 		return new ResponseEntity<>(subjectsDto, HttpStatus.OK);
 	}
 
-	// GET ALL FOR ADMIN
-	@RequestMapping(method = RequestMethod.GET, value = "/admin")
-	@JsonView(Views.Admin.class)
-	public ResponseEntity<List<SubjectDTO>> getAllSubjectsForAdmin() {
-		List<SubjectDTO> subjectsDto = new ArrayList<>();
-		List<SubjectEntity> subjects = subjectService.getAllSubjects();
-
-		for (SubjectEntity s : subjects) {
-			subjectsDto.add(new SubjectDTO(s));
-		}
-		return new ResponseEntity<>(subjectsDto, HttpStatus.OK);
-	}
-
 	// GET BY ID
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<?> getSubjectById(@PathVariable Long id) {
 
@@ -97,6 +88,7 @@ public class SubjectController {
 	}
 
 	// POST
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> saveSubjects(@Valid @RequestBody SubjectDTO subjectDTO, BindingResult result) {
 
@@ -119,6 +111,7 @@ public class SubjectController {
 	}
 
 	// PUT
+	@Secured ({"TEACHER", "ADMIN"})
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ResponseEntity<?> editSubject(@Valid @RequestBody SubjectDTO subjectDTO, BindingResult result,
 			@PathVariable("id") Long id) {
@@ -152,6 +145,7 @@ public class SubjectController {
 	}
 
 	// DELETE
+	@Secured ("ADMIN")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> deleteSubject(@PathVariable Long id) {
 		try {

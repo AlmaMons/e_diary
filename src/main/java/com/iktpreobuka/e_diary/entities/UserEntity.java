@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.iktpreobuka.e_diary.entities.dto.UserDTO;
 import com.iktpreobuka.e_diary.enumerations.ERole;
+import com.iktpreobuka.e_diary.util.Encryption;
 
 @Entity
 @Table(name = "user")
@@ -40,7 +41,7 @@ public class UserEntity {
 		super();
 		this.id = u.getId();
 		this.username = u.getUsername();
-		this.password = u.getPassword();
+		this.password = Encryption.getPassEncoded(u.getPassword());
 		this.person = p;
 		this.role = u.getRole();
 	}
