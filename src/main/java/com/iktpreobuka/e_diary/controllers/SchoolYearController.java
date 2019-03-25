@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
 @RequestMapping(path = "/api/v1/years")
+@CrossOrigin
 public class SchoolYearController {
 
 	@Autowired
@@ -57,6 +59,19 @@ public class SchoolYearController {
 		}
 		return new ResponseEntity<>(yearDto, HttpStatus.OK);
 	}
+	// GET ALL FOR ADMIN
+		@Secured ("ADMIN")
+		@RequestMapping(method = RequestMethod.GET, value = "/admin")
+		@JsonView(Views.Admin.class)
+		public ResponseEntity<List<SchoolYearDTO>> getAllYearForAdmin() {
+			List<SchoolYearDTO> yearDto = new ArrayList<>();
+			List<SchoolYearEntity> year = yearService.getAllYear();
+
+			for (SchoolYearEntity y : year) {
+				yearDto.add(new SchoolYearDTO(y));
+			}
+			return new ResponseEntity<>(yearDto, HttpStatus.OK);
+		}
 
 	// GET BY ID
 	@Secured ("ADMIN")

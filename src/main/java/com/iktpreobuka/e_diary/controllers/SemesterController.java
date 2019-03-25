@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
 @RequestMapping(path = "/api/v1/semesters")
+@CrossOrigin
 public class SemesterController {
 
 	@Autowired
@@ -62,6 +64,20 @@ public class SemesterController {
 		}
 		return new ResponseEntity<>(semestersDto, HttpStatus.OK);
 	}
+	
+	// GET ALL FOR PRIVATE
+		@Secured ("ADMIN")
+		@RequestMapping(method = RequestMethod.GET, value = "/admin")
+		@JsonView(Views.Admin.class)
+		public ResponseEntity<List<SemesterDTO>> getAllSemestersForAdmin() {
+			List<SemesterDTO> semestersDto = new ArrayList<>();
+			List<SemesterEntity> semesters = semesterService.getAllSemesters();
+
+			for (SemesterEntity s : semesters) {
+				semestersDto.add(new SemesterDTO(s));
+			}
+			return new ResponseEntity<>(semestersDto, HttpStatus.OK);
+		}
 
 
 	// GET BY ID

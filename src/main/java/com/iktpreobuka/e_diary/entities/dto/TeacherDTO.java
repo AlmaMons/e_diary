@@ -54,7 +54,6 @@ public class TeacherDTO {
 	@JsonView (Views.Admin.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Europe/Belgrade")
 	private Date birthDate;
-	
 	@JsonView (Views.Private.class)
 	private ArrayList<Long> subjectsIDs;
 	

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
 @RequestMapping(path = "/api/v1/marks")
+@CrossOrigin
 public class MarkController {
 
 	@Autowired
@@ -50,18 +52,18 @@ public class MarkController {
 	@Autowired
 	private SubjectService subjectService;
 
-//	// GET ALL FOR PUBLIC
-//	@RequestMapping(method = RequestMethod.GET, value = "/public")
-//	@JsonView(Views.Public.class)
-//	public ResponseEntity<List<MarkDTO>> getAllMarksForPublic() {
-//		List<MarkDTO> marksDto = new ArrayList<>();
-//		List<MarkEntity> marks = markService.getAllMarks();
-//
-//		for (MarkEntity m : marks) {
-//			marksDto.add(new MarkDTO(m));
-//		}
-//		return new ResponseEntity<>(marksDto, HttpStatus.OK);
-//	}
+	// GET ALL FOR PUBLIC
+	@RequestMapping(method = RequestMethod.GET, value = "/public")
+	@JsonView(Views.Public.class)
+	public ResponseEntity<List<MarkDTO>> getAllMarksForPublic() {
+		List<MarkDTO> marksDto = new ArrayList<>();
+		List<MarkEntity> marks = markService.getAllMarks();
+
+		for (MarkEntity m : marks) {
+			marksDto.add(new MarkDTO(m));
+		}
+		return new ResponseEntity<>(marksDto, HttpStatus.OK);
+	}
 
 	// GET ALL FOR PRIVATE
 	@Secured ({"TEACHER", "STUDENT", "PARENT"})

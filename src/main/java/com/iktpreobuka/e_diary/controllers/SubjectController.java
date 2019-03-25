@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ import com.iktpreobuka.e_diary.util.RESTError;
 
 @RestController
 @RequestMapping(path = "/api/v1/subjects")
+@CrossOrigin
 public class SubjectController {
 
 	@Autowired
@@ -72,6 +74,20 @@ public class SubjectController {
 		}
 		return new ResponseEntity<>(subjectsDto, HttpStatus.OK);
 	}
+	
+	// GET ALL FOR ADMIN
+		@Secured ("ADMIN")
+		@RequestMapping(method = RequestMethod.GET, value = "/admin")
+		@JsonView(Views.Private.class)
+		public ResponseEntity<List<SubjectDTO>> getAllSubjectsForAdmin() {
+			List<SubjectDTO> subjectsDto = new ArrayList<>();
+			List<SubjectEntity> subjects = subjectService.getAllSubjects();
+
+			for (SubjectEntity s : subjects) {
+				subjectsDto.add(new SubjectDTO(s));
+			}
+			return new ResponseEntity<>(subjectsDto, HttpStatus.OK);
+		}
 
 	// GET BY ID
 	@Secured ({"TEACHER", "ADMIN"})
@@ -124,12 +140,12 @@ public class SubjectController {
 				if (sy == null) {
 					return new ResponseEntity<>(("School year doesn't exist!"), HttpStatus.BAD_REQUEST);
 				}
-				// nastavnik
+				
 				ArrayList<TeacherEntity> teachers = teacherService.getAllTeachersByID(subjectDTO.getTeachersIDs());
 				if (teachers == null) {
 					return new ResponseEntity<>(("Error has occured! Teachers not found!"), HttpStatus.BAD_REQUEST);
 				}
-				// odeljenje
+				
 				ArrayList<ClassEntity> classes = classService.getAllClassesByID(subjectDTO.getClassesIDs());
 				if (classes == null) {
 					return new ResponseEntity<>(("Error has occured! Classes not found!"), HttpStatus.BAD_REQUEST);

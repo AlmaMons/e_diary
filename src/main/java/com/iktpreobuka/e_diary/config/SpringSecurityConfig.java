@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity (securedEnabled = true)
+//@EnableGlobalMethodSecurity (securedEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -32,8 +32,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic()
+		http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic()
 				.authenticationEntryPoint(authEntryPoint);
+		
+		
 	}
 
 	@Autowired
